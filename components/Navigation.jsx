@@ -74,7 +74,7 @@ export function Navigation () {
                     aria-label='Search'
                   />
 
-                  {/* Aqui defino un color y ancho para el boton search del menu */}
+                  {/* Aquí defino un color y ancho para el botón search del menu */}
                   <style type='text/css'>
                     {`
                     .btn-flat {
