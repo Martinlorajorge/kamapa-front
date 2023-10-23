@@ -1,7 +1,8 @@
+'use client'
 import React, { Suspense } from 'react'
-import AuthContextProvider from '../contexts/authContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Loading from './components/Loading' // Importa el componente de carga
+import SessionAuthProvider from '../../contexts/SessionAuthProvider'
 
 export default function RootLayout ({ children }) {
   return (
@@ -17,9 +18,13 @@ export default function RootLayout ({ children }) {
         />
       </head>
       <body>
-        <Suspense fallback={<Loading />}>
-          <AuthContextProvider>{children}</AuthContextProvider>
-        </Suspense>
+        <main className='container mx-auto'>
+          <SessionAuthProvider>
+            <Suspense fallback={<Loading />}>
+              {children}
+            </Suspense>
+          </SessionAuthProvider>
+        </main>
       </body>
     </html>
   )
