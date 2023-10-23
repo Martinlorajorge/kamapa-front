@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
-import { Navigation } from '../components/Navigation'
+import AuthContextProvider from '../contexts/authContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Loading from '../components/Loading'; // Importa el componente de carga
+import Loading from './components/Loading' // Importa el componente de carga
 
 export default function RootLayout ({ children }) {
   return (
@@ -18,8 +18,7 @@ export default function RootLayout ({ children }) {
       </head>
       <body>
         <Suspense fallback={<Loading />}>
-          <Navigation />
-          {children}
+          <AuthContextProvider>{children}</AuthContextProvider>
         </Suspense>
       </body>
     </html>

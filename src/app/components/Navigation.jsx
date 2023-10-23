@@ -38,6 +38,7 @@ export function Navigation () {
               </Offcanvas.Header>
               <hr />
               <Offcanvas.Header className='justify-content-center'>
+                {/* Logo de la Escuela, traer Link de la BD luego */}
                 <img
                   src='./LogoJRR.png'
                   width='100'
@@ -49,9 +50,25 @@ export function Navigation () {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className='justify-content-end flex-grow-1 pe-3'>
+                  {/* Aqui van los Link, y se enrrutan de la siguiente manera */}
                   <Nav>
-                    <Link className='nav-link' href='/'>
-                      Home
+                    <Link className='nav-link' href='/home'>
+                      Inicio
+                    </Link>
+                  </Nav>
+                  <Nav>
+                    <Link className='nav-link' href='/alumnos'>
+                      Alumnos
+                    </Link>
+                  </Nav>
+                  <Nav>
+                    <Link className='nav-link' href='/profesores'>
+                      Profesores
+                    </Link>
+                  </Nav>
+                  <Nav>
+                    <Link className='nav-link' href='/aulas'>
+                      Aulas
                     </Link>
                   </Nav>
                   <Nav>
@@ -59,13 +76,15 @@ export function Navigation () {
                       About
                     </Link>
                   </Nav>
-                  <NavDropdown title='Dropdown' id={`offcanvasNavbarDropdown-expand-${expand}`}>
-                    <NavDropdown.Item href='#action3'>Action</NavDropdown.Item>
-                    <NavDropdown.Item href='#action4'>Another action</NavDropdown.Item>
+                  <NavDropdown title='Registros' id={`offcanvasNavbarDropdown-expand-${expand}`}>
+                    <NavDropdown.Item href='/form_alumnos'>Alumnos</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href='#action5'>Something else here</NavDropdown.Item>
+                    <NavDropdown.Item href='/form_personal'>Personal</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item href='/form_roles'>Asignación de Permisos</NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
+                <hr />
                 <Form className='d-flex'>
                   <Form.Control
                     type='search'
