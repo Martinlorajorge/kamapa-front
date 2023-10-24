@@ -17,7 +17,7 @@
       "extends": [
         "standard-with-typescript",
         "plugin:react/recommended",
-        "./node_modules/standard/eslintrc.json"
+        // "./node_modules/standard/eslintrc.json"
       ],
       "rules": {
         // ... otras reglas ...
