@@ -18,10 +18,10 @@ export default function RootLayout ({ children }) {
         />
       </head>
       <body>
-        <main className='container mx-auto'>
+        <main className='container mx-0'>
           <SessionAuthProvider>
             <Suspense fallback={<Loading />}>
-              {children}
+            {children}
             </Suspense>
           </SessionAuthProvider>
         </main>
