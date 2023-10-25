@@ -29,8 +29,8 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container mt-4">
-      <Card className="text-center">
+    <div className='container mt-4'>
+      <Card className='text-center'>
         <Card.Header>Dashboard</Card.Header>
         <Card.Body>
           <Card.Title>Bienvenido, {session?.user?.name}</Card.Title>
@@ -38,19 +38,20 @@ const Dashboard = () => {
             Aquí puedes ver información relevante para el usuario.
           </Card.Text>
           <Button
-            variant="flat"
-            size="xxl"
-            className="btn-flat"
+            variant='flat'
+            size='xxl'
+            className='btn-flat'
             onClick={getUsuario}
           >
             Comencemos
           </Button>
         </Card.Body>
-        <Card.Footer className="text-muted">
+        <Card.Footer className='text-muted'>
           {session ? 'Sesión activa' : 'No hay sesión activa'}
         </Card.Footer>
       </Card>
     </div>
+
   )
 }
 export default Dashboard
