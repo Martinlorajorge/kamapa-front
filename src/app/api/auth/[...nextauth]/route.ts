@@ -2,6 +2,8 @@ import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
 const handler = NextAuth({
+
+  //Proveedor del servicio
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -28,7 +30,17 @@ const handler = NextAuth({
         return user
       }
     })
-  ]
+  ],
+  // Nutre de información el usuario y le pasa el token
+  callbacks: {
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user = token as any;
+      return session;
+    },
+  },
 })
 
 export { handler as GET, handler as POST }
