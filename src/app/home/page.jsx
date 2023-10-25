@@ -1,13 +1,14 @@
-"use client"
-import { useSession } from "next-auth/react";
+'use client'
+import { useSession } from 'next-auth/react'
+import Loading from '../components/Loading'
 
-const HomePage = () => {
-  const { data: session, status } = useSession();
+const Dashboard = () => {
+  const { data: session, status } = useSession()
 
-  if (status === "loading") {
-    return <p>Loading...</p>;
+  if (status === 'loading') {
+    return <Loading />
   }
-  console.log(session);
+  console.log(session)
 
   return (
     <div>
@@ -16,6 +17,6 @@ const HomePage = () => {
         <code>{JSON.stringify(session, null, 2)}</code>
       </pre>
     </div>
-  );
-};
-export default Dashboard;
+  )
+}
+export default Dashboard

@@ -21,15 +21,16 @@ const Loading = () => {
         alignItems: 'center'
       }}
       >
-        <img src="./Loading KAMAPA.gif" alt="Loading..." style={{
-          maxWidth: '90%', // Establece el valor máximo del ancho de la imagen
-          maxHeight: '90%', // Establece el valor máximo de la altura de la imagen
-          objectFit: 'cover' // Hace que la imagen se ajuste completamente al contenedor
-        }}
+        <img
+          src='./Loading KAMAPA.gif' alt='Loading...' style={{
+            maxWidth: '90%', // Establece el valor máximo del ancho de la imagen
+            maxHeight: '90%', // Establece el valor máximo de la altura de la imagen
+            objectFit: 'cover' // Hace que la imagen se ajuste completamente al contenedor
+          }}
         />
       </div>
     </div>
   )
 }
 
-export default Loading;
+export default Loading

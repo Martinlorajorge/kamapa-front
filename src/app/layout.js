@@ -21,7 +21,7 @@ export default function RootLayout ({ children }) {
         <main className='container mx-0'>
           <SessionAuthProvider>
             <Suspense fallback={<Loading />}>
-            {children}
+              {children}
             </Suspense>
           </SessionAuthProvider>
         </main>
