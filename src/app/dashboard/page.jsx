@@ -13,7 +13,7 @@ const Dashboard = () => {
     )
   }
   console.log(session)
-  console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+  console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
 
   // traigo los datos del usuario para mostrarlos al hacer click en el boton (por ahora) y ver si trae el tpken y el beaarer esta bien configurado para que haya persistencia en la session
   const getUsuario = async () => {

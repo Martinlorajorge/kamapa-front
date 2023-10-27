@@ -1,5 +1,5 @@
 export default function LoginPage () {
   return (
-    <h1>Dashboard</h1>
+    <h1>Landing Page Presentation</h1>
   )
 }

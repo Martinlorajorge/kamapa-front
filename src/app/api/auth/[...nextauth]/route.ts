@@ -12,22 +12,30 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize (credentials) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              email: credentials?.email,
-              password: credentials?.password
-            }),
-            headers: { 'Content-Type': 'application/json' }
-          }
-        )
-        const user = await res.json()
+        // const res = await fetch(
+        //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
+        //   {
+        //     method: 'POST',
+        //     body: JSON.stringify({
+        //       email: credentials?.email,
+        //       password: credentials?.password
+        //     }),
+        //     headers: { 'Content-Type': 'application/json' }
+        //   }
+        // )
+        // const user = await res.json()
 
-        if (user.error) throw user
+        // if (user.error) throw user
 
-        return user
+        // return user
+
+        if (credentials.email === 'martin@test.com' && credentials.password === '123123') {
+          // Usuario provisional autenticado
+          return { id: 1, email: 'martin@test.com', password: '123123' };
+        } else {
+          // Usuario no autorizado
+          throw new Error('Credenciales inválidas');
+        }
       }
     })
   ],
@@ -41,6 +49,9 @@ const handler = NextAuth({
       session.user = token as any;
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
   },
 })
 
