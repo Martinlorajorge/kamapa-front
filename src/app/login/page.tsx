@@ -1,9 +1,10 @@
-"use client";
-
+"use client"
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Card, Button,  } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
+import Image from 'next/image';
+
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<string[]>([]);
@@ -30,14 +31,23 @@ const LoginPage = () => {
   };
 
   return (
-<div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundImage: 'url(./backLogin.jpg)', backgroundSize: 'cover' }}>
+<div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+  <Image
+    src="/backLogin.jpg"
+    alt="Background"
+    layout="fill"
+    objectFit="cover"
+  />
+  <div className="d-flex justify-content-center align-items-center vh-100">
         <Card className="text-center">
         <Card.Header>
-          <img
-            src="./Logo.png"
-            alt="Logo"
-            style={{ width: '70px', borderRadius: '50%' }}
-          />
+        < Image
+          src="/Logo.png"
+          alt="Logo"
+          width={70}
+          height={70}
+          style={{ borderRadius: '50%' }}
+        />
         </Card.Header>
         <Card.Body>
           <h2>Ingresar</h2>
@@ -71,7 +81,7 @@ const LoginPage = () => {
                     }
                   `}
                   </style>
-            <Button type="submit" variant="flat" size="xxl">
+            <Button type="submit" variant='flat' size='lg' className='btn-flat'>
               Login
             </Button>
           </form>
@@ -86,6 +96,7 @@ const LoginPage = () => {
           )}
         </Card.Body>
       </Card>
+    </div>
     </div>
   );
 };

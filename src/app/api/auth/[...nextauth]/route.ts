@@ -31,7 +31,14 @@ const handler = NextAuth({
 
         if (credentials.email === 'martin@test.com' && credentials.password === '123123') {
           // Usuario provisional autenticado
-          return { id: 1, email: 'martin@test.com', password: '123123' };
+          const user = { 
+            id: 1,
+            name:'Martin Lora',
+            email: 'martin@test.com', 
+            password: '123123' 
+          };
+
+          return user
         } else {
           // Usuario no autorizado
           throw new Error('Credenciales inválidas');

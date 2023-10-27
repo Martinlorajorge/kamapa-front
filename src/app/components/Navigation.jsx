@@ -1,6 +1,7 @@
 'use client'
 import { Nav, Navbar, NavDropdown, Button, Form, Container, Offcanvas } from 'react-bootstrap'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export function Navigation () {
   return (
@@ -12,12 +13,12 @@ export function Navigation () {
           <Container fluid>
             <Navbar.Brand href='#'>
               {/* Logo de KAMAPA */}
-              <img
-                src='./Logo.png'
-                width='50'
-                height='50'
-                className='d-inline-block align-top'
+              <Image
+                src='/Logo.png'
                 alt='logo'
+                width={50}
+                height={50}
+                className='d-inline-block align-top'
                 style={{
                   borderRadius: '50%'
                 }}
@@ -39,11 +40,12 @@ export function Navigation () {
               <hr />
               <Offcanvas.Header className='justify-content-center'>
                 {/* Logo de la Escuela, traer Link de la BD luego */}
-                <img
-                  src='./LogoJRR.png'
-                  width='100'
-                  className='justify-content-center'
+                <Image
+                  src='/LogoJRR.png'
                   alt='logo'
+                  width={100}
+                  height={100}
+                  className='justify-content-center'
                   style={{ marginBottom: '10px' }}
                 />
 
@@ -52,7 +54,7 @@ export function Navigation () {
                 <Nav className='justify-content-end flex-grow-1 pe-3'>
                   {/* Aqui van los Link, y se enrrutan de la siguiente manera */}
                   <Nav>
-                    <Link className='nav-link' href='/home'>
+                    <Link className='nav-link' href='/dashboard'>
                       Inicio
                     </Link>
                   </Nav>
