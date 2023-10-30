@@ -52,7 +52,7 @@ export function Navigation () {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className='justify-content-end flex-grow-1 pe-3'>
-                  {/* Aqui van los Link, y se enrrutan de la siguiente manera */}
+                  {/* Aquí van los Link, y se enrrutan de la siguiente manera */}
                   <Nav>
                     <Link className='nav-link' href='/dashboard'>
                       Inicio
