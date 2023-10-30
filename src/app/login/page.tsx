@@ -82,7 +82,7 @@ const LoginPage = () => {
                   `}
                   </style>
             <Button type="submit" variant='flat' size='lg' className='btn-flat'>
-              Login
+              Ingresar
             </Button>
           </form>
           {errors.length > 0 && (

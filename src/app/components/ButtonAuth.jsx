@@ -8,13 +8,12 @@ export default function ButtonAuth () {
   if (status === 'loading') {
     return <Loading />
   }
-
   if (session) {
     return (
       <>
-        <p>Signed in as {session.user?.email}</p>
+        <p>Inicio Seccion con {session.user?.email}</p>
         <button onClick={() => signOut()} className='btn btn-danger'>
-          Sign out
+          Cerrar Seccion
         </button>
       </>
     )
@@ -22,9 +21,9 @@ export default function ButtonAuth () {
 
   return (
     <>
-      <p>Not signed in</p>
-      <button onClick={() => signIn()} className='btn btn-primary'>
-        Sign in
+      <p>No registrado</p>
+      <button onClick={() => signIn()}>
+        Ingresar
       </button>
     </>
   )
