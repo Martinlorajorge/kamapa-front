@@ -29,7 +29,7 @@ export default function AdminPage () {
               <CardTitle style={{ textAlign: 'center' }}>Institución</CardTitle>
               <CardSubtitle>Administra los productos de tu tienda</CardSubtitle>
               {/* Utiliza el componente Link para los enlaces */}
-              <Link href='/dashboard/admin/institucion'>
+              <Link href='/dashboard/admin/reginstitucion'>
                 <Button variant='primary' style={{ width: '100%' }}>Ir</Button>
               </Link>
             </CardBody>

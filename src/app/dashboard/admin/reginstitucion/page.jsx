@@ -11,7 +11,9 @@ import {
   Container
 } from 'react-bootstrap'
 
-const Institucion = () => {
+import SuccessMessage from '../../../components/SuccessMessage'
+
+const RegInstitucion = () => {
   const [datos, setDatos] = useState({
     institucion: {
       cue: '',
@@ -22,11 +24,12 @@ const Institucion = () => {
     domicilio: {
       calle: '',
       numero: '',
-      barrioId: ''
+      barrio: '',
+      localidad: '',
+      provinciaId: ''
     },
     contacto: {
-      contacto: '',
-      tipoContactoId: ''
+      contacto: ''
     }
   })
 
@@ -37,9 +40,7 @@ const Institucion = () => {
     descripcion: '',
     calle: '',
     numero: '',
-    barrioId: '',
-    contacto: '',
-    tipoContactoId: ''
+    contacto: ''
   })
 
   const handleChange = (e) => {
@@ -58,7 +59,7 @@ const Institucion = () => {
     e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3000/api/institucion', {
+      const response = await fetch('http://localhost:3001/api/institucion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -79,14 +80,16 @@ const Institucion = () => {
           domicilio: {
             calle: '',
             numero: '',
-            barrioId: ''
+            barrio: '',
+            localidad: '',
+            provinciaIdId: ''
           },
           contacto: {
-            contacto: '',
-            tipoContactoId: ''
+            contacto: ''
           }
         })
-        alert('Institución creada correctamente')
+        const message = <SuccessMessage message='Institución creada correctamente' />
+        document.body.appendChild(message)
       } else {
         setErrores(data.errors)
       }
@@ -199,6 +202,19 @@ const Institucion = () => {
         </Row>
         <br />
         <Row>
+          <style type='text/css'>
+            {`
+                    .btn-flat {
+                      background-color: purple;
+                      color: white;
+                    }
+
+                    .btn-xxl {
+                      padding: 0.4rem 1rem;
+                      font-size: 1rem;
+                    }
+                  `}
+          </style>
           <Button variant='flat' size='xxl' type='submit'>Crear Institución</Button>
         </Row>
       </Form>
@@ -206,4 +222,4 @@ const Institucion = () => {
   )
 }
 
-export default Institucion
+export default RegInstitucion

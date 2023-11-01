@@ -37,8 +37,8 @@ const Dashboard = () => {
           <Card.Text>
             Aquí puedes ver información relevante para el usuario.
           </Card.Text>
-                   <style type='text/css'>
-                    {`
+          <style type='text/css'>
+            {`
                     .btn-flat {
                       background-color: purple;
                       color: white;
@@ -49,7 +49,7 @@ const Dashboard = () => {
                       font-size: 1rem;
                     }
                   `}
-                  </style>
+          </style>
           <Button
             variant='flat'
             size='xxl'
