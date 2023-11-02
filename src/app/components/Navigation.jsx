@@ -1,7 +1,8 @@
 'use client'
-import { Nav, Navbar, NavDropdown, Button, Form, Container, Offcanvas } from 'react-bootstrap'
+import { Nav, Navbar, NavDropdown, Container, Offcanvas } from 'react-bootstrap'
 import Link from 'next/link'
 import Image from 'next/image'
+import ButtonAuth from './ButtonAuth'
 
 export function Navigation () {
   return (
@@ -52,7 +53,7 @@ export function Navigation () {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className='justify-content-end flex-grow-1 pe-3'>
-                  {/* Aqui van los Link, y se enrrutan de la siguiente manera */}
+                  {/* Aquí van los Link, y se enrrutan de la siguiente manera */}
                   <Nav>
                     <Link className='nav-link' href='/dashboard'>
                       Inicio
@@ -87,30 +88,16 @@ export function Navigation () {
                   </NavDropdown>
                 </Nav>
                 <hr />
-                <Form className='d-flex'>
+                {/* <Form className='d-flex'>
                   <Form.Control
                     type='search'
                     placeholder='Search'
                     className='me-2'
                     aria-label='Search'
-                  />
+                  /> */}
 
-                  {/* Aquí defino un color y ancho para el botón search del menu */}
-                  <style type='text/css'>
-                    {`
-                    .btn-flat {
-                      background-color: purple;
-                      color: white;
-                    }
-
-                    .btn-xxl {
-                      padding: 0.4rem 1rem;
-                      font-size: 1rem;
-                    }
-                  `}
-                  </style>
-                  <Button variant='flat' size='xxl'>Search</Button>
-                </Form>
+                <ButtonAuth/>
+                {/* </Form> */}
               </Offcanvas.Body>
             </Navbar.Offcanvas>
           </Container>
