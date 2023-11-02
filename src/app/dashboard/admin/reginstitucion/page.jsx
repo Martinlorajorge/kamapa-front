@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Form, FormGroup, Row, Col, Button } from 'react-bootstrap'
+import { Form, FormGroup, Row, Col, Button, Container } from 'react-bootstrap'
 
 const RegInstitucion = () => {
   const [datos, setDatos] = useState({
@@ -8,22 +8,21 @@ const RegInstitucion = () => {
       cue: '',
       logo: '',
       nombre: '',
-      descripcion: ''
+      descripcion: '',
     },
     domicilio: {
       calle: '',
       numero: '',
       barrio: '',
       localidad: '',
-      provinciaId: ''
+      provinciaId: '',
     },
     contacto: {
       contacto: '',
-      tipoContactoId: ''
-    }
-  })
+    },
+  });
 
-  const [provincias, setProvincias] = useState([])
+  const [provincias, setProvincias] = useState([]);
   const [errores, setErrores] = useState({
     cue: '',
     logo: '',
@@ -35,37 +34,58 @@ const RegInstitucion = () => {
     localidad: '',
     provinciaId: '',
     contacto: '',
-    tipoContactoId: ''
-  })
+  });
+
+  const cargarProvincias = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/provincia', {
+        // Opciones de fetch
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProvincias(data);
+      } else {
+        console.error('Error al cargar provincias');
+        // Reintentar la solicitud después de un tiempo (por ejemplo, después de 1 segundo)
+        setTimeout(cargarProvincias, 1000);
+      }
+    } catch (error) {
+      console.error('Error al enviar la solicitud:', error);
+      // Reintentar la solicitud después de un tiempo (por ejemplo, después de 1 segundo)
+      setTimeout(cargarProvincias, 1000);
+    }
+  };
+
   useEffect(() => {
-    // Hacer la solicitud GET a la API de provincias cuando el componente se monte
-    fetch('http://localhost:3001/api/provincia')
-      .then(response => response.json())
-      .then(data => setProvincias(data))
-      .catch(error => console.error('Error al cargar provincias:', error))
-  }, []) // El segundo argumento del useEffect es un array vacío, lo que significa que se ejecutará solo una vez después del primer renderizado
+    cargarProvincias();
+  }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setDatos((prevDatos) => ({
       ...prevDatos,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       // Realiza la solicitud POST a la API con los datos del formulario
       const response = await fetch('http://localhost:3001/api/institucion', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ datos })
-      })
+        body: JSON.stringify({ datos }),
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.status === 201) {
         // Si la creación fue exitosa, reinicia los datos del formulario y muestra una alerta
@@ -74,31 +94,33 @@ const RegInstitucion = () => {
             cue: '',
             logo: '',
             nombre: '',
-            descripcion: ''
+            descripcion: '',
           },
           domicilio: {
             calle: '',
             numero: '',
             barrio: '',
             localidad: '',
-            provinciaId: ''
+            provinciaId: '',
           },
           contacto: {
             contacto: '',
-            tipoContactoId: ''
-          }
-        })
-        alert('Institución creada correctamente')
+          },
+        });
+        alert('Institución creada correctamente');
       } else {
         // Si hay errores en la respuesta, actualiza el estado de errores para mostrarlos al usuario
-        setErrores(data.errors)
+        setErrores(data.errors);
       }
     } catch (error) {
-      console.error('Error al enviar la solicitud:', error)
+      console.error('Error al enviar la solicitud:', error);
+      // Reintentar la solicitud después de un tiempo (por ejemplo, después de 1 segundo)
+      setTimeout(() => handleSubmit(e), 1000);
     }
-  }
+  };
 
   return (
+    <Container className="p-3">
     <Form onSubmit={handleSubmit}>
       {/* Datos de la institución */}
       <Row>
@@ -225,24 +247,28 @@ const RegInstitucion = () => {
       </Row>
       <Row>
         <Col sm={6}>
-          <FormGroup>
-            <Form.Label htmlFor='provinciaId'>Provincia</Form.Label>
-            <Form.Control
-              as='select'
-              name='domicilio.provinciaId'
-              value={datos.domicilio.provinciaId}
-              onChange={handleChange}
-              required
-            >
-              <option value=''>Selecciona una provincia</option>
-              {provincias.map((provincia) => (
-                <option key={provincia.id} value={provincia.id}>
-                  {provincia.provincia}
-                </option>
-              ))}
-            </Form.Control>
-            <span style={{ color: 'red' }}>{errores.provinciaId}</span>
-          </FormGroup>
+        <FormGroup>
+          <Form.Label htmlFor='provinciaId'>Provincia</Form.Label>
+          <Form.Select
+            name='domicilio.provinciaId'
+            value={datos.domicilio.provinciaId}
+            onChange={handleChange}
+            required
+          >
+            <option value=''>Selecciona una provincia</option>
+            {provincias.map((provincia) => (
+              <option key={provincia.id} value={provincia.id}>
+                {provincia.provincia}
+              </option>
+            ))}
+          </Form.Select>
+          <span style={{ color: 'red' }}>{errores.provinciaId}</span>
+        </FormGroup>
+        {
+          errores.provinciaId && (
+            <p style={{ color: 'red' }}>Debes seleccionar una provincia</p>
+          )
+        }
         </Col>
       </Row>
 
@@ -262,42 +288,29 @@ const RegInstitucion = () => {
             <span style={{ color: 'red' }}>{errores.contacto}</span>
           </FormGroup>
         </Col>
-        <Col sm={6}>
-          <FormGroup>
-            <Form.Label htmlFor='tipoContactoId'>ID de Tipo de Contacto</Form.Label>
-            <Form.Control
-              type='text'
-              name='contacto.tipoContactoId'
-              value={datos.contacto.tipoContactoId}
-              onChange={handleChange}
-              placeholder='Ingrese el ID de Tipo de Contacto'
-              required
-            />
-            <span style={{ color: 'red' }}>{errores.tipoContactoId}</span>
-          </FormGroup>
-        </Col>
       </Row>
       <br />
       <Row>
-        <Col className='text-center' sm={12}>
-          <style type='text/css'>
-            {`
-                    .btn-flat {
-                      background-color: purple;
-                      color: white;
-                    }
+          <Col className='text-center' sm={12}>
+            <style type='text/css'>
+              {`
+                .btn-flat {
+                  background-color: purple;
+                  color: white;
+                }
 
-                    .btn-xxl {
-                      padding: 0.4rem 1rem;
-                      font-size: 1rem;
-                    }
-                  `}
-          </style>
-          <Button variant='flat' size='xxl' type='submit'>Crear Institución</Button>
-        </Col>
-      </Row>
+                .btn-xxl {
+                  padding: 0.4rem 1rem;
+                  font-size: 1rem;
+                }
+              `}
+            </style>
+            <Button variant='flat' size='xxl' type='submit'>Crear Institución</Button>
+          </Col>
+        </Row>
 
     </Form>
+    </Container>
   )
 }
 

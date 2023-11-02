@@ -1,4 +1,4 @@
-'use client'
+
 import { Nav, Navbar, NavDropdown, Container, Offcanvas } from 'react-bootstrap'
 import Link from 'next/link'
 import Image from 'next/image'
