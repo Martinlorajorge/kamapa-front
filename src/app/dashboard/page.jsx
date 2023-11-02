@@ -2,6 +2,7 @@
 import { useSession } from 'next-auth/react'
 import Loading from '../components/Loading'
 import { Card, Button } from 'react-bootstrap'
+import Link from 'next/link'
 
 const Dashboard = () => {
   const { data: session, status } = useSession()
@@ -54,10 +55,9 @@ const Dashboard = () => {
             variant='flat'
             size='xxl'
             className='btn-flat'
-            onClick={getUsuario}
           >
             Comencemos
-          </Button>
+            </Button>
         </Card.Body>
         <Card.Footer className='text-muted'>
           {session ? 'Sesión activa' : 'No hay sesión activa'}

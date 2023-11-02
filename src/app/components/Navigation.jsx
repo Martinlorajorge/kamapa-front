@@ -96,7 +96,7 @@ export function Navigation () {
                     aria-label='Search'
                   /> */}
 
-                <ButtonAuth/>
+                <ButtonAuth />
                 {/* </Form> */}
               </Offcanvas.Body>
             </Navbar.Offcanvas>
