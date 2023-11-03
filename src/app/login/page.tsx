@@ -81,7 +81,7 @@ const LoginPage = () => {
                     }
                   `}
                   </style>
-            <Button type="submit" variant='flat' size='lg' className='btn-flat'>
+            <Button type="submit" variant='flat' size='lg' className='btn-flat' >
               Ingresar
             </Button>
           </form>
