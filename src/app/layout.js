@@ -1,4 +1,4 @@
-
+'use client'
 import React, { Suspense } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Loading from './components/Loading' // Importa el componente de carga

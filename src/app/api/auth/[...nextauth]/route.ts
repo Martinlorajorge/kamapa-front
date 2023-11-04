@@ -49,11 +49,12 @@ const handler = NextAuth({
   // Nutre de información el usuario y le pasa el token
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user };
+      token.user = user;
+      return token
     },
     // y aki le da esos datos a la session
     async session({ session, token }) {
-      session.user = token.user as any;
+      session.user = token as any;
       return session;
     },
   },
