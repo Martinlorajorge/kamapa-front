@@ -48,10 +48,28 @@ const RegInstitucion = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      [name]: value,
-    }));
+
+    setFormState((prevFormState) => {
+      // Realiza una copia profunda del estado anterior
+      const updatedFormState = {
+        ...prevFormState,
+        institucion: { ...prevFormState.institucion },
+        domicilio: { ...prevFormState.domicilio },
+        contacto: { ...prevFormState.contacto },
+      };
+
+      // Actualiza solo la propiedad específica que ha cambiado
+      const propertyPath = name.split('.');
+      let currentState: any = updatedFormState;
+
+      for (let i = 0; i < propertyPath.length - 1; i++) {
+        currentState = currentState[propertyPath[i]];
+      }
+
+      currentState[propertyPath[propertyPath.length - 1]] = value;
+
+      return updatedFormState;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -247,4 +265,5 @@ const RegInstitucion = () => {
     </Container>
   );
 };
+
 export default RegInstitucion;
