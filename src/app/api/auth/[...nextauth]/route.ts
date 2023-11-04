@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 const handler = NextAuth({
 
-  //Proveedor del servicio
+  // Proveedor del servicio
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -31,36 +31,35 @@ const handler = NextAuth({
 
         if (credentials.email === 'martin@test.com' && credentials.password === '123123') {
           // Usuario provisional autenticado
-          const user = { 
+          const user = {
             id: 1,
-            name:'Martin Lora',
-            email: 'martin@test.com', 
-            password: '123123' 
-          };
+            name: 'Martin Lora',
+            email: 'martin@test.com',
+            password: '123123'
+          }
 
           return user
         } else {
           // Usuario no autorizado
-          throw new Error('Credenciales inválidas');
+          throw new Error('Credenciales inválidas')
         }
       }
     })
   ],
   // Nutre de información el usuario y le pasa el token
   callbacks: {
-    async jwt({ token, user }) {
-      token.user = user;
-      return token
+    async jwt ({ token, user }) {
+      return ({ ...token, ...user })
     },
     // y aki le da esos datos a la session
-    async session({ session, token }) {
-      session.user = token as any;
-      return session;
-    },
+    async session ({ session, token, user }) {
+      session.user = token
+      return session
+    }
   },
   pages: {
-    signIn: "/login",
-  },
+    signIn: '/login'
+  }
 })
 
 export { handler as GET, handler as POST }

@@ -29,11 +29,10 @@ export default function RootLayout ({ children }) {
         />
       </head>
       <body>
-        <main className='container mx-0'>
+        <main className='container-fluid p-0'>
           <SessionAuthProvider>
-            <Suspense fallback={<Loading />}>
-              {children}
-            </Suspense>
+            <Suspense fallback={<Loading />} />
+            {children}
           </SessionAuthProvider>
         </main>
       </body>

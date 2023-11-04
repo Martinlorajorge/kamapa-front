@@ -2,7 +2,6 @@
 import { useSession } from 'next-auth/react'
 import Loading from '../components/Loading'
 import { Card, Button } from 'react-bootstrap'
-// import Link from 'next/link'
 
 const Dashboard = () => {
   const { data: session, status } = useSession()
@@ -13,24 +12,26 @@ const Dashboard = () => {
       <Loading />
     )
   }
-  console.log(session)
-  console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
 
   // traigo los datos del usuario para mostrarlos al hacer click en el boton (por ahora) y ver si trae el tpken y el beaarer esta bien configurado para que haya persistencia en la session
   const getUsuario = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/usuario`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session?.user?.token}`
-      }
-    })
-    const data = await res.json()
-    console.log(data)
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/usuario`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.user?.token}`
+        }
+      })
+      const data = await res.json()
+      console.log(data)
+    } catch (error) {
+      console.error('Error al obtener datos del usuario:', error)
+    }
   }
 
   return (
-    <div className='container mt-4'>
+    <div className='d-flex justify-content-center align-items-center mt-5'>
       <Card className='text-center'>
         <Card.Header>Dashboard</Card.Header>
         <Card.Body>
@@ -40,21 +41,22 @@ const Dashboard = () => {
           </Card.Text>
           <style type='text/css'>
             {`
-                    .btn-flat {
-                      background-color: purple;
-                      color: white;
-                    }
+                .btn-flat {
+                  background-color: purple;
+                  color: white;
+                }
 
-                    .btn-xxl {
-                      padding: 0.4rem 1rem;
-                      font-size: 1rem;
-                    }
-                  `}
+                .btn-xxl {
+                  padding: 0.4rem 1rem;
+                  font-size: 1rem;
+                }
+              `}
           </style>
           <Button
             variant='flat'
             size='xxl'
             className='btn-flat'
+            onClick={getUsuario}
           >
             Comencemos
           </Button>
@@ -67,4 +69,5 @@ const Dashboard = () => {
 
   )
 }
+
 export default Dashboard
