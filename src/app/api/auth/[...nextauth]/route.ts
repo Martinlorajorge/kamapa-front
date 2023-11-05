@@ -17,7 +17,7 @@ const handler = NextAuth({
         //   {
         //     method: 'POST',
         //     body: JSON.stringify({
-        //       email: credentials?.email,
+        //       dni: credentials?.email,
         //       password: credentials?.password
         //     }),
         //     headers: { 'Content-Type': 'application/json' }
