@@ -1,7 +1,12 @@
 'use client'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
+
+interface Provincia {
+  id: string;
+  nombre: string;
+}
 
 interface FormData {
   institucion: {
@@ -23,8 +28,8 @@ interface FormData {
   };
 }
 
-const RegInstitucion = () => {
-  const [formState, setFormState] = React.useState<FormData>({
+const RegInstitucionPage = () => {
+  const [formState, setFormState] = useState<FormData>({
     institucion: {
       cue: '',
       logo: '',
@@ -44,11 +49,29 @@ const RegInstitucion = () => {
     },
   });
 
+  const [provincias, setProvincias] = useState<Provincia[]>([]);
   const { status, setStatus } = useFormStatus();
+
+  useEffect(() => {
+    const fetchProvincias = async () => {
+      try {
+        const response = await fetch('URL_DEL_ENDPOINT_DE_API_PARA_PROVINCIAS');
+        if (response.ok) {
+          const data = await response.json();
+          setProvincias(data);
+        } else {
+          console.error('Error al cargar las provincias');
+        }
+      } catch (error) {
+        console.error('Error al cargar las provincias:', error);
+      }
+    };
+
+    fetchProvincias();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-
     setFormState((prevFormState) => {
       // Realiza una copia profunda del estado anterior
       const updatedFormState = {
@@ -84,14 +107,11 @@ const RegInstitucion = () => {
       });
 
       if (response.ok) {
-        // Operaciones después de un envío exitoso
         setStatus('success');
       } else {
-        // Operaciones en caso de error
         setStatus('error');
       }
     } catch (error) {
-      // Manejar errores de la solicitud
       console.error('Error al enviar el formulario:', error);
       setStatus('error');
     }
@@ -100,7 +120,6 @@ const RegInstitucion = () => {
   return (
     <Container className='p-3'>
       <Form onSubmit={handleSubmit}>
-        {/* Datos de la institución */}
         <Row className='mb-3'>
           <Col sm={6}>
             <Form.Group controlId='cue'>
@@ -153,8 +172,6 @@ const RegInstitucion = () => {
             </Form.Group>
           </Col>
         </Row>
-
-        {/* Datos de domicilio */}
         <Row className='mb-3'>
           <Col sm={6}>
             <Form.Group controlId='calle'>
@@ -219,14 +236,15 @@ const RegInstitucion = () => {
                 required
               >
                 <option value=''>Selecciona una provincia</option>
-                {/* Opciones de provincia llenadas dinámicamente */}
-                {/* Agrega opciones de provincias aquí */}
+                {provincias.map((provincia) => (
+                  <option key={provincia.id} value={provincia.id}>
+                    {provincia.nombre}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
           </Col>
         </Row>
-
-        {/* Datos de contacto */}
         <Row className='mb-3'>
           <Col sm={6}>
             <Form.Group controlId='contacto'>
@@ -255,15 +273,32 @@ const RegInstitucion = () => {
         </Row>
 
         {/* Botón de envío */}
-        <Button variant='primary' type='submit'>
-          Enviar
+        <Button
+          variant='flat'
+          size='xxl, sm, lg, rg'
+          type='submit'
+          style={{
+            backgroundColor: 'purple',
+            color: 'white',
+            padding: '0.4rem 1rem',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'white';
+            e.currentTarget.style.color = 'black';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'purple';
+            e.currentTarget.style.color = 'white';
+          }}
+        >
+          Registrar Institucion
         </Button>
-
-        {/* Muestra el estado del formulario */}
         {status && <p>Estado del formulario: {status}</p>}
       </Form>
     </Container>
   );
 };
 
-export default RegInstitucion;
+export default RegInstitucionPage;
