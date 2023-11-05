@@ -12,37 +12,37 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize (credentials) {
-        // const res = await fetch(
-        //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
-        //   {
-        //     method: 'POST',
-        //     body: JSON.stringify({
-        //       dni: credentials?.email,
-        //       password: credentials?.password
-        //     }),
-        //     headers: { 'Content-Type': 'application/json' }
-        //   }
-        // )
-        // const user = await res.json()
-
-        // if (user.error) throw user
-
-        // return user
-
-        if (credentials.email === 'martin@test.com' && credentials.password === '123123') {
-          // Usuario provisional autenticado
-          const user = {
-            id: 1,
-            name: 'Martin Lora',
-            email: 'martin@test.com',
-            password: '123123'
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              dni: credentials?.email,
+              password: credentials?.password
+            }),
+            headers: { 'Content-Type': 'application/json' }
           }
+        )
+        const user = await res.json()
 
-          return user
-        } else {
-          // Usuario no autorizado
-          throw new Error('Credenciales inválidas')
-        }
+        if (user.error) throw user
+
+        return user
+
+        // if (credentials.email === 'martin@test.com' && credentials.password === '123123') {
+        //   // Usuario provisional autenticado
+        //   const user = {
+        //     id: 1,
+        //     name: 'Martin Lora',
+        //     email: 'martin@test.com',
+        //     password: '123123'
+        //   }
+
+        //   return user
+        // } else {
+        //   // Usuario no autorizado
+        //   throw new Error('Credenciales inválidas')
+        // }
       }
     })
   ],
@@ -53,7 +53,9 @@ const handler = NextAuth({
     },
     // y aki le da esos datos a la session
     async session ({ session, token, user }) {
+      
       session.user = token
+      console.log('session', session)
       return session
     }
   },
