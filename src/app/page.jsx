@@ -3,9 +3,10 @@ import { Container } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
 import Image from 'next/image';
+import Link from 'next/link';
 function DarkVariantExample() {
   return (
-    <div style={{ width:'100vw', height:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-evenly'}}>
+    <div style={{ width:'100vw', height:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-evenly', zIndex:'-1'}}>
       <Image
         src="/backLogin.jpg"
         alt="Background"
@@ -35,10 +36,20 @@ function DarkVariantExample() {
         />
       </Carousel.Item>
     </Carousel>
-    <Button type="submit" variant='flat' size='lg' className='btn-flat' href="#"
-    style={{backgroundColor:'purple', color:'white', padding:'0.4rem 1rem', fontSize:'1rem',zIndex:'100'}}>
-       Comenzar
-    </Button>
+    <style type='text/css'>
+            {`
+                .btn-flat {
+                  background-color: purple;
+                  color: white;
+                }
+
+                .btn-xxl {
+                  padding: 0.4rem 1rem;
+                  font-size: 1rem;
+                }
+              `}
+          </style>
+    <Link variant='flat' size='xxl' className='btn-flat' href='/Login' type='text'> Comencemos </Link>
     </div>
   );
 }
