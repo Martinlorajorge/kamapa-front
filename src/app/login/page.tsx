@@ -53,7 +53,7 @@ const LoginPage = () => {
           <h2>Ingresar</h2>
           <form onSubmit={handleSubmit}>
             <input
-              type="email"
+              type="text"
               placeholder="Correo Electrónico"
               name="email"
               className="form-control mb-2"
