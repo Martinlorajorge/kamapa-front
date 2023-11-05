@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useFormStatus } from 'react-dom';
 
+
 interface Provincia {
-  id: string;
+  id: number;
   nombre: string;
 }
 
@@ -20,7 +21,7 @@ interface FormData {
     numero: string;
     barrio: string;
     localidad: string;
-    provinciaId: string;
+    provinciaId: number;
   };
   contacto: {
     contacto: string;
@@ -41,7 +42,7 @@ const RegInstitucionPage = () => {
       numero: '',
       barrio: '',
       localidad: '',
-      provinciaId: '',
+      provinciaId: 0,
     },
     contacto: {
       contacto: '',
@@ -49,29 +50,12 @@ const RegInstitucionPage = () => {
     },
   });
 
-  const [provincias, setProvincias] = useState<Provincia[]>([]);
+  const [provincias, setProvincias] = useState([]); // Estado para almacenar las provincias obtenidas de la API
   const { status, setStatus } = useFormStatus();
-
-  useEffect(() => {
-    const fetchProvincias = async () => {
-      try {
-        const response = await fetch('URL_DEL_ENDPOINT_DE_API_PARA_PROVINCIAS');
-        if (response.ok) {
-          const data = await response.json();
-          setProvincias(data);
-        } else {
-          console.error('Error al cargar las provincias');
-        }
-      } catch (error) {
-        console.error('Error al cargar las provincias:', error);
-      }
-    };
-
-    fetchProvincias();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+
     setFormState((prevFormState) => {
       // Realiza una copia profunda del estado anterior
       const updatedFormState = {
@@ -95,10 +79,32 @@ const RegInstitucionPage = () => {
     });
   };
 
+  // Efecto para obtener las provincias al cargar el componente
+  useEffect(() => {
+    // Función para obtener las provincias desde la API
+    const fetchProvincias = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/provincia');
+        if (response.ok) {
+          const data = await response.json();
+          setProvincias(data); // Almacena las provincias en el estado local
+          // console.log(data)
+        } else {
+          console.error('Error al cargar las provincias');
+        }
+      } catch (error) {
+        console.error('Error al cargar las provincias:', error);
+      }
+    };
+
+    // Llama a la función para obtener las provincias cuando el componente se monta
+    fetchProvincias();
+  }, []); // El segundo argumento [] asegura que este efecto se ejecute solo una vez después del montaje inicial
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('URL_DEL_ENDPOINT_DE_API', {
+      const response = await fetch('http://localhost:3001/api/institucion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,16 +113,18 @@ const RegInstitucionPage = () => {
       });
 
       if (response.ok) {
+        // Operaciones después de un envío exitoso
         setStatus('success');
       } else {
+        // Operaciones en caso de error
         setStatus('error');
       }
     } catch (error) {
+      // Manejar errores de la solicitud
       console.error('Error al enviar el formulario:', error);
       setStatus('error');
     }
   };
-
   return (
     <Container className='p-3'>
       <Form onSubmit={handleSubmit}>
@@ -231,14 +239,14 @@ const RegInstitucionPage = () => {
               <Form.Control
                 as='select'
                 name='domicilio.provinciaId'
-                value={formState.domicilio.provinciaId}
+                value={formState.domicilio.provincia}
                 onChange={handleChange}
                 required
               >
                 <option value=''>Selecciona una provincia</option>
                 {provincias.map((provincia) => (
                   <option key={provincia.id} value={provincia.id}>
-                    {provincia.nombre}
+                    {provincia.provincia}
                   </option>
                 ))}
               </Form.Control>
@@ -271,11 +279,10 @@ const RegInstitucionPage = () => {
             </Form.Group>
           </Col>
         </Row>
-
         {/* Botón de envío */}
         <Button
           variant='flat'
-          size='xxl, sm, lg, rg'
+          size='xxl'
           type='submit'
           style={{
             backgroundColor: 'purple',
@@ -293,7 +300,7 @@ const RegInstitucionPage = () => {
             e.currentTarget.style.color = 'white';
           }}
         >
-          Registrar Institucion
+          Registrar Institución
         </Button>
         {status && <p>Estado del formulario: {status}</p>}
       </Form>
