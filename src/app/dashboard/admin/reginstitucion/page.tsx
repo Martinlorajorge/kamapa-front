@@ -1,12 +1,11 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { useFormStatus } from 'react-dom';
-
+import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
+import useFormStatus from '../../../components/useFormStatus';
 
 interface Provincia {
   id: number;
-  nombre: string;
+  provincia: string;
 }
 
 interface FormData {
@@ -21,11 +20,11 @@ interface FormData {
     numero: string;
     barrio: string;
     localidad: string;
-    provinciaId: number;
+    provinciaId: string;
   };
   contacto: {
     contacto: string;
-    correo: string;
+    // correo: string;
   };
 }
 
@@ -42,22 +41,22 @@ const RegInstitucionPage = () => {
       numero: '',
       barrio: '',
       localidad: '',
-      provinciaId: 0,
+      provinciaId: '',
     },
     contacto: {
       contacto: '',
-      correo: '',
+      // correo: '',
     },
   });
 
-  const [provincias, setProvincias] = useState([]); // Estado para almacenar las provincias obtenidas de la API
-  const { status, setStatus } = useFormStatus();
+  const [provincias, setProvincias] = useState<Provincia[]>([]);
+  const { status, setStatus, resetStatus } = useFormStatus();
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-
     setFormState((prevFormState) => {
-      // Realiza una copia profunda del estado anterior
       const updatedFormState = {
         ...prevFormState,
         institucion: { ...prevFormState.institucion },
@@ -65,7 +64,6 @@ const RegInstitucionPage = () => {
         contacto: { ...prevFormState.contacto },
       };
 
-      // Actualiza solo la propiedad específica que ha cambiado
       const propertyPath = name.split('.');
       let currentState: any = updatedFormState;
 
@@ -74,21 +72,17 @@ const RegInstitucionPage = () => {
       }
 
       currentState[propertyPath[propertyPath.length - 1]] = value;
-
       return updatedFormState;
     });
   };
 
-  // Efecto para obtener las provincias al cargar el componente
   useEffect(() => {
-    // Función para obtener las provincias desde la API
     const fetchProvincias = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/provincia');
+        const response = await fetch('https://kamapabackend-production.up.railway.app/api/provincia');
         if (response.ok) {
           const data = await response.json();
-          setProvincias(data); // Almacena las provincias en el estado local
-          // console.log(data)
+          setProvincias(data);
         } else {
           console.error('Error al cargar las provincias');
         }
@@ -97,34 +91,37 @@ const RegInstitucionPage = () => {
       }
     };
 
-    // Llama a la función para obtener las provincias cuando el componente se monta
     fetchProvincias();
-  }, []); // El segundo argumento [] asegura que este efecto se ejecute solo una vez después del montaje inicial
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/institucion', {
+      const response = await fetch('https://kamapabackend-production.up.railway.app/api/institucion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formState),
+        body: JSON.stringify({
+          datos: {
+            institucion: formState.institucion,
+            domicilio: formState.domicilio,
+            contacto: formState.contacto,
+          },
+        }),
       });
 
       if (response.ok) {
-        // Operaciones después de un envío exitoso
         setStatus('success');
       } else {
-        // Operaciones en caso de error
         setStatus('error');
       }
     } catch (error) {
-      // Manejar errores de la solicitud
       console.error('Error al enviar el formulario:', error);
       setStatus('error');
     }
   };
+
   return (
     <Container className='p-3'>
       <Form onSubmit={handleSubmit}>
@@ -239,16 +236,18 @@ const RegInstitucionPage = () => {
               <Form.Control
                 as='select'
                 name='domicilio.provinciaId'
-                value={formState.domicilio.provincia}
+                value={formState.domicilio.provinciaId}
                 onChange={handleChange}
                 required
               >
                 <option value=''>Selecciona una provincia</option>
-                {provincias.map((provincia) => (
-                  <option key={provincia.id} value={provincia.id}>
-                    {provincia.provincia}
-                  </option>
+                {Array.isArray(provincias) &&
+                    provincias.map((provincia) => (
+                    <option key={provincia.id} value={provincia.id}>
+                      {provincia.provincia}
+                    </option>
                 ))}
+
               </Form.Control>
             </Form.Group>
           </Col>
@@ -266,7 +265,7 @@ const RegInstitucionPage = () => {
               />
             </Form.Group>
           </Col>
-          <Col sm={6}>
+          {/* <Col sm={6}>
             <Form.Group controlId='correo'>
               <Form.Label>Correo</Form.Label>
               <Form.Control
@@ -277,12 +276,11 @@ const RegInstitucionPage = () => {
                 required
               />
             </Form.Group>
-          </Col>
+          </Col> */}
         </Row>
-        {/* Botón de envío */}
         <Button
           variant='flat'
-          size='xxl'
+          // size='xxl'
           type='submit'
           style={{
             backgroundColor: 'purple',
@@ -302,7 +300,24 @@ const RegInstitucionPage = () => {
         >
           Registrar Institución
         </Button>
+
+
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Institución registrada con éxito</Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button variant='primary' onClick={() => setShowModal(false)}>
+              Aceptar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+
         {status && <p>Estado del formulario: {status}</p>}
+        
+
+
       </Form>
     </Container>
   );

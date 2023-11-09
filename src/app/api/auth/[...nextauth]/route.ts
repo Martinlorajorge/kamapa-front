@@ -8,7 +8,7 @@ const handler = NextAuth({
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'email', type: 'email', placeholder: 'test@test.com' },
+        dni: { label: 'dni', type: 'text', placeholder: 'Ingresa tu DNI' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize (credentials) {
@@ -17,7 +17,7 @@ const handler = NextAuth({
           {
             method: 'POST',
             body: JSON.stringify({
-              dni: credentials?.email,
+              dni: credentials?.dni,
               password: credentials?.password
             }),
             headers: { 'Content-Type': 'application/json' }
@@ -25,7 +25,9 @@ const handler = NextAuth({
         )
         const user = await res.json()
 
-        if (user.error) throw user
+        if (user.error) {
+          throw new Error(user.error) // Mostrar este error en la página de inicio de sesión
+        }
 
         return user
 
@@ -53,7 +55,6 @@ const handler = NextAuth({
     },
     // y aki le da esos datos a la session
     async session ({ session, token, user }) {
-      
       session.user = token
       console.log('session', session)
       return session

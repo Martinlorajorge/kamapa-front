@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<string[]>([]);
-  const [email, setEmail] = useState<string>("");
+  const [DNI, setDNI] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
 
@@ -17,7 +17,7 @@ const LoginPage = () => {
     setErrors([]);
 
     const responseNextAuth = await signIn("credentials", {
-      email,
+      DNI,
       password,
       redirect: false,
     });
@@ -54,11 +54,11 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              placeholder="Correo Electrónico"
-              name="email"
+              placeholder="Ingresa tu DNI"
+              name="dni"
               className="form-control mb-2"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={DNI}
+              onChange={(event) => setDNI(event.target.value)}
             />
             <input
               type="password"
