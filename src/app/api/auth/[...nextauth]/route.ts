@@ -12,7 +12,7 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize (credentials) {
-        /*
+        // Aquí viene el usuario del servidor
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
           {
@@ -23,18 +23,19 @@ const handler = NextAuth({
             }),
             headers: { 'Content-Type': 'application/json' }
           }
-        );
-        const user = await res.json();
+        )
+        const user = await res.json()
 
         if (user.error) {
-          throw new Error(user.error); // Mostrar este error en la página de inicio de sesión
+          throw new Error(user.error) // Mostrar este error en la página de inicio de sesión
         }
 
-        return user;
-        */
+        console.log(user)
+        return user
+        // hasta aquí debo comentar si quiero usar el de prueba que esta abajo
 
         // Desde aquí para empezar a usar el usuario de prueba
-
+        /*
         if (credentials.dni === '12345678' && credentials.password === '123123') {
           // Usuario provisional autenticado
           const user = {
@@ -48,7 +49,7 @@ const handler = NextAuth({
           // Usuario no autorizado
           throw new Error('Credenciales inválidas')
         }
-
+*/
         // Hasta Aquí hay que comentar si queremos usar el servidor
       }
     })
@@ -60,7 +61,10 @@ const handler = NextAuth({
     },
     // y aki le da esos datos a la session
     async session ({ session, token, user }) {
-      session.user = token
+      session.user = {
+        ...token,
+        ...user
+      }
       console.log('session', session)
       return session
     }
