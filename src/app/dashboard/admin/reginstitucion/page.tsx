@@ -79,7 +79,7 @@ const RegInstitucionPage = () => {
   useEffect(() => {
     const fetchProvincias = async () => {
       try {
-        const response = await fetch('https://kamapabackend-production.up.railway.app/api/provincia');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/provincia`);
         if (response.ok) {
           const data = await response.json();
           setProvincias(data);
@@ -97,7 +97,7 @@ const RegInstitucionPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://kamapabackend-production.up.railway.app/api/institucion', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/institucion`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
