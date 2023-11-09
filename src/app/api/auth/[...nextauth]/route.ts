@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
 
 const handler = NextAuth({
 
@@ -11,7 +11,7 @@ const handler = NextAuth({
         dni: { label: 'dni', type: 'text', placeholder: 'Ingresa tu DNI' },
         password: { label: 'Password', type: 'password' }
       },
-    async authorize(credentials) {
+      async authorize (credentials) {
         /*
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
@@ -40,13 +40,13 @@ const handler = NextAuth({
           const user = {
             id: 1,
             name: 'Martin Lora',
-            dni: '12345678',
+            dni: '12345678'
             // Puedes agregar más propiedades del usuario si es necesario
-          };
-          return user;
+          }
+          return user
         } else {
           // Usuario no autorizado
-          throw new Error('Credenciales inválidas');
+          throw new Error('Credenciales inválidas')
         }
 
         // Hasta Aquí hay que comentar si queremos usar el servidor
@@ -55,11 +55,11 @@ const handler = NextAuth({
   ],
   // Nutre de información el usuario y le pasa el token
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt ({ token, user }) {
       return ({ ...token, ...user })
     },
     // y aki le da esos datos a la session
-    async session({ session, token, user }) {
+    async session ({ session, token, user }) {
       session.user = token
       console.log('session', session)
       return session
@@ -68,6 +68,6 @@ const handler = NextAuth({
   pages: {
     signIn: '/login'
   }
-});
+})
 
 export { handler as GET, handler as POST }
