@@ -35,7 +35,7 @@ const Dashboard = () => {
       <Card className='text-center'>
         <Card.Header>Dashboard</Card.Header>
         <Card.Body>
-          <Card.Title>Bienvenido, {session?.user?.user?.user?.nombre}</Card.Title>
+          <Card.Title>Bienvenido, {session?.user?.user?.nombre}</Card.Title>
           <Card.Text>
             Aquí puedes ver información relevante para el usuario.
           </Card.Text>

@@ -15,7 +15,7 @@ export default function AdminPage () {
               <CardTitle style={{ textAlign: 'center' }}>Usuarios</CardTitle>
               <CardSubtitle>Gestiona a los usuarios de tu aplicación</CardSubtitle>
               {/* Utiliza el componente Link para los enlaces */}
-              <Link href='/admin/users'>
+              <Link href='/admin/regusuarios'>
 
                 <Button variant='primary' style={{ width: '100%' }}>Ir</Button>
 
