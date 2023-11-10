@@ -14,7 +14,7 @@ interface Provincia {
 interface FormData {
   institucion: {
     cue: string;
-    logo: string;
+    logo: File;
     nombre: string;
     descripcion: string;
   };
@@ -37,7 +37,7 @@ const RegInstitucionPage = () => {
   const [formState, setFormState] = useState<FormData>({
     institucion: {
       cue: '',
-      logo: '',
+      logo: null,
       nombre: '',
       descripcion: '',
     },
@@ -85,24 +85,46 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   });
 };
 
+// const handleFileInputChange = (e) => {
+//   const file = e.target.files[0];
+
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         const logoDataUrl = reader.result;
+//         setFormState((prevFormState) => ({
+//           ...prevFormState,
+//           institucion: {
+//             ...prevFormState.institucion,
+//             logo: logoDataUrl as string, // Asegúrate de que logo sea siempre una cadena de texto
+//           },
+//         }));
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   };
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////Codigo modificaco por pascual para subir imagen//////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const handleFileInputChange = (e) => {
   const file = e.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const logoDataUrl = reader.result;
-        setFormState((prevFormState) => ({
-          ...prevFormState,
-          institucion: {
-            ...prevFormState.institucion,
-            logo: logoDataUrl as string, // Asegúrate de que logo sea siempre una cadena de texto
-          },
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  if (file) {
+    setFormState((prevFormState) => ({
+      ...prevFormState,
+      institucion: {
+        ...prevFormState.institucion,
+        logo: file, // Almacena el archivo directamente en el estado
+      },
+    }));
+  }
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
   // Carga las provincias desde la API al cargar el componente
   useEffect(() => {
@@ -141,6 +163,7 @@ const handleFileInputChange = (e) => {
         setShowModal(true);
         setModalMessage('Institución registrada con éxito');
         setStatus('success');
+        console.log(response);
       } else {
         const errorData = await response.json();
         setShowModal(true);
@@ -148,6 +171,7 @@ const handleFileInputChange = (e) => {
         const errorMessage = errorData.message !== undefined ? errorData.message : 'Error desconocido al registrar la institución';
         setModalMessage(`Error al registrar la institución: ${errorMessage}`);
         setStatus('error');
+        console.log('Error al registrar la institución:', errorData);
       }
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
