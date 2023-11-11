@@ -1,30 +1,22 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-    },// .eslintrc.js
-    "module.exports" : {
-      // ... otras configuraciones ...
-      "extends": [
-        "standard-with-typescript",
-        "plugin:react/recommended",
-        "./node_modules/standard/eslintrc.json"
-      ],
-      "rules": {
-        // ... otras reglas ...
-        "react/prop-types": "off" // Desactiva la regla react/prop-types
-        // ... otras reglas ...
-      },
-      // ... otras configuraciones ...
-    }
-    
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"plugins": ["react"],
+	"rules": {}, // .eslintrc.js
+	"module.exports": {
+		// ... otras configuraciones ...
+		"extends": ["plugin:react/recommended"],
+		"rules": {
+			// ... otras reglas ...
+			"react/prop-types": "off" // Desactiva la regla react/prop-types
+			// ... otras reglas ...
+		}
+		// ... otras configuraciones ...
+	}
 }
