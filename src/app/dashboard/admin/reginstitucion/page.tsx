@@ -27,7 +27,7 @@ interface FormData {
   };
   contacto: {
     contacto: string;
-    // email: string;
+    email: string;
   };
 }
 
@@ -50,7 +50,7 @@ const RegInstitucionPage = () => {
     },
     contacto: {
       contacto: '',
-      // email: '',
+      email: '',
     },
   });
 
@@ -60,7 +60,7 @@ const RegInstitucionPage = () => {
   const [modalMessage, setModalMessage] = useState('');
 
 // Función para manejar los cambios en los campos del formulario
-const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
 
   // Divide el nombre del campo en partes para manejar campos anidados
@@ -148,40 +148,75 @@ const handleFileInputChange = (e) => {
   // Función para manejar el envío del formulario
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Crea un objeto FormData para enviar los datos del formulario
+    const formData = new FormData();
+
+    // Agrega los datos del formulario al objeto FormData
+    formData.append('cue', formState.institucion.cue);
+    formData.append('logo', formState.institucion.logo);
+    formData.append('nombre', formState.institucion.nombre);
+    formData.append('descripcion', formState.institucion.descripcion);
+    formData.append('calle', formState.domicilio.calle);
+    formData.append('numero', formState.domicilio.numero);
+    formData.append('barrio', formState.domicilio.barrio);
+    formData.append('localidad', formState.domicilio.localidad);
+    formData.append('provinciaId', formState.domicilio.provinciaId);
+    formData.append('contacto', formState.contacto.contacto);
+    formData.append('email', formState.contacto.email);
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/institucion`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          datos: formState, // Envía los datos del formulario al backend
-        }),
+        body: formData,
       });
-  
+
+      const data = await response.json();
+
+      console.log(data);
+
       if (response.ok) {
-        setShowModal(true);
-        setModalMessage('Institución registrada con éxito');
+        // Si el registro fue exitoso, muestra un mensaje de éxito
         setStatus('success');
-        console.log(response);
-      } else {
-        const errorData = await response.json();
+        setModalMessage('Institución registrada con éxito');
         setShowModal(true);
-        // Verifica si errorData.message es undefined y ajusta el mensaje en consecuencia
-        const errorMessage = errorData.message !== undefined ? errorData.message : 'Error desconocido al registrar la institución';
-        setModalMessage(`Error al registrar la institución: ${errorMessage}`);
+        // Limpia el estado del formulario
+        setFormState({
+          institucion: {
+            cue: '',
+            logo: null,
+            nombre: '',
+            descripcion: '',
+          },
+          domicilio: {
+            calle: '',
+            numero: '',
+            barrio: '',
+            localidad: '',
+            provinciaId: '',
+          },
+          contacto: {
+            contacto: '',
+            email: '',
+          },
+        });
+      } else {
+        // Si el registro no fue exitoso, muestra un mensaje de error
         setStatus('error');
-        console.log('Error al registrar la institución:', errorData);
+        setModalMessage('Error al registrar la institución');
+        setShowModal(true);
+        const data = await response.json();
+        console.log('Error al registrar la institución' + data);
       }
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      setShowModal(true);
-      setModalMessage('Error al enviar el formulario');
+      // Si el registro no fue exitoso, muestra un mensaje de error
       setStatus('error');
+      setModalMessage('Error al registrar la institución');
+      setShowModal(true);
+      console.log('Error al registrar la institución' + error);
     }
   };
   
-
   // Renderiza el formulario y el modal
   return (
     <Container className='p-3'>
@@ -331,7 +366,7 @@ const handleFileInputChange = (e) => {
               />
             </Form.Group>
           </Col>
-          {/* <Col sm={6}>
+          <Col sm={6}>
             <Form.Group controlId='email'>
               <Form.Label>Correo</Form.Label>
               <Form.Control
@@ -342,7 +377,7 @@ const handleFileInputChange = (e) => {
                 required
               />
             </Form.Group>
-          </Col> */}
+          </Col>
         </Row>
         {/* Botón para enviar el formulario */}
         <Button
