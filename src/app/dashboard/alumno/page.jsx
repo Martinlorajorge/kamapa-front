@@ -3,7 +3,7 @@ import React from 'react'
 import { Container, Card, Button, CardBody, CardTitle, CardSubtitle } from 'react-bootstrap'
 import Link from 'next/link'
 
-export default function AdminPage () {
+export default function AlumnoPage () {
   return (
     <Container>
       <h1 style={{ margin: '2rem 0 1rem 0', textAlign: 'center' }}>Panel Admin</h1>
@@ -29,9 +29,9 @@ export default function AdminPage () {
               <CardTitle style={{ textAlign: 'center' }}>Institución</CardTitle>
               <CardSubtitle>Administra los productos de tu tienda</CardSubtitle>
               {/* Utiliza el componente Link para los enlaces */}
-              <Link href='/dashboard/admin/vistainstitucion'>
+              { /*<Link href='/dashboard/admin/reginstitucion'>
                 <Button variant='primary' style={{ width: '100%' }}>Ir</Button>
-              </Link>
+              </Link>*/}
             </CardBody>
           </Card>
         </div>
