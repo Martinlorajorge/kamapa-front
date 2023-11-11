@@ -1,8 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
-import handleFileChange from '../../../components/handleFileChange'; // Importa la función para manejar el cambio de archivos
-import useFormStatus from '../../../components/useFormStatus'; // Importa el hook para el estado del formulario
+import useFormStatus from './../../../../components/useFormStatus';
 
 // Define la interfaz para el objeto de provincia
 interface Provincia {
