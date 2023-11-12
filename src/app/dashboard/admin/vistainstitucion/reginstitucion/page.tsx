@@ -36,7 +36,7 @@ const RegInstitucionPage = () => {
 	const [formState, setFormState] = useState<FormData>({
 		institucion: {
 			cue: '',
-			logo: null,
+			logo: new File([], ''),
 			nombre: '',
 			descripcion: '',
 		},
@@ -129,7 +129,29 @@ const RegInstitucionPage = () => {
 		fetchProvincias();
 	}, []);
 
-	// Función para manejar el envío del formulario
+	// Define una función para reiniciar el estado del formulario
+	const resetForm = () => {
+		return {
+			institucion: {
+				cue: '',
+				logo: new File([], ''),
+				nombre: '',
+				descripcion: '',
+			},
+			domicilio: {
+				calle: '',
+				numero: '',
+				barrio: '',
+				localidad: '',
+				provinciaId: '',
+			},
+			contacto: {
+				contacto: '',
+				email: '',
+			},
+		};
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
@@ -138,7 +160,11 @@ const RegInstitucionPage = () => {
 
 		// Agrega los datos del formulario al objeto FormData
 		formData.append('cue', formState.institucion.cue);
-		formData.append('logo', formState.institucion.logo);
+		formData.append(
+			'logo',
+			formState.institucion.logo,
+			formState.institucion.logo.name,
+		); // Asegúrate de incluir el nombre del archivo
 		formData.append('nombre', formState.institucion.nombre);
 		formData.append('descripcion', formState.institucion.descripcion);
 		formData.append('calle', formState.domicilio.calle);
@@ -167,40 +193,21 @@ const RegInstitucionPage = () => {
 				setStatus('success');
 				setModalMessage('Institución registrada con éxito');
 				setShowModal(true);
-				// Limpia el estado del formulario
-				setFormState({
-					institucion: {
-						cue: '',
-						logo: '',
-						nombre: '',
-						descripcion: '',
-					},
-					domicilio: {
-						calle: '',
-						numero: '',
-						barrio: '',
-						localidad: '',
-						provinciaId: '',
-					},
-					contacto: {
-						contacto: '',
-						email: '',
-					},
-				});
+				// Limpia el estado del formulario llamando a la función resetForm
+				setFormState(resetForm());
 			} else {
 				// Si el registro no fue exitoso, muestra un mensaje de error
 				setStatus('error');
 				setModalMessage('Error al registrar la institución');
 				setShowModal(true);
-				const data = await response.json();
-				console.log('Error al registrar la institución' + data);
+				console.log('Error al registrar la institución', data);
 			}
 		} catch (error) {
-			// Si el registro no fue exitoso, muestra un mensaje de error
+			// Si hay un error en la solicitud, muestra un mensaje de error
 			setStatus('error');
 			setModalMessage('Error al registrar la institución');
 			setShowModal(true);
-			console.log('Error al registrar la institución' + error);
+			console.error('Error al registrar la institución', error);
 		}
 	};
 
