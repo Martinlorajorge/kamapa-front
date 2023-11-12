@@ -39,7 +39,7 @@ const Dashboard = () => {
 				<Card.Body>
 					<Card.Title>
 						Bienvenido, {session?.user?.user?.nombre}{' '}
-						{session?.user?.user?.nombre}
+						{session?.user?.user?.apellido}
 					</Card.Title>
 					<Card.Text>
 						Legajo: {session?.user?.user?.legajo}
