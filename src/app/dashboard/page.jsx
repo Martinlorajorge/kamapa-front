@@ -35,35 +35,36 @@ const Dashboard = () => {
 	return (
 		<div className='d-flex justify-content-center align-items-center mt-5'>
 			<Card className='text-center'>
-				<Card.Header>Dashboard</Card.Header>
+				<Card.Header>Panel {session.user?.rol?.name}</Card.Header>
 				<Card.Body>
 					<Card.Title>
 						Bienvenido, {session?.user?.user?.nombre}{' '}
 						{session?.user?.user?.apellido}
 					</Card.Title>
 					<Card.Text>
-						Legajo: {session?.user?.user?.legajo}
-						telefono: {session?.user?.user?.telefono}
+						<strong>Legajo:</strong> {session?.user?.user?.legajo} <br />
+						<strong>Teléfono:</strong> {session?.user?.user?.telefono}
 					</Card.Text>
 
-					<style type='text/css'>
-						{`
-                .btn-flat {
-                  background-color: purple;
-                  color: white;
-                }
-
-                .btn-xxl {
-                  padding: 0.4rem 1rem;
-                  font-size: 1rem;
-                }
-              `}
-					</style>
 					<Link href={`/dashboard/${session.user?.rol?.name}`}>
 						<Button
 							variant='flat'
-							size='xxl'
-							className='btn-flat'>
+							type='submit'
+							style={{
+								backgroundColor: 'purple',
+								color: 'white',
+								padding: '0.4rem 1rem',
+								fontSize: '1rem',
+								transition: 'all 0.3s ease',
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.backgroundColor = 'white';
+								e.currentTarget.style.color = 'black';
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.backgroundColor = 'purple';
+								e.currentTarget.style.color = 'white';
+							}}>
 							Comencemos
 						</Button>
 					</Link>

@@ -159,7 +159,7 @@ const RegEmpleadoPage = () => {
 						telefono: '',
 						is_active: true,
 						create_for: `${session?.user?.user?.nombre}`,
-						update_for: `${session?.user?.user?.nombre}`,
+						update_for: '',
 						password: '',
 						rolId: `${session?.user?.rols?.name}`,
 					},
@@ -181,6 +181,7 @@ const RegEmpleadoPage = () => {
 				const data = await response.json();
 				console.error('Error al registrar el usuario:', data);
 			}
+			console.log(formData);
 		} catch (error) {
 			console.error('Error al enviar el formulario:', error);
 			setStatusMessage('Error al registrar el usuario.');
@@ -253,6 +254,19 @@ const RegEmpleadoPage = () => {
 						</Form.Group>
 					</Col>
 					<Col>
+						<Form.Group controlId='matricula'>
+							<Form.Label>matricula</Form.Label>
+							<Form.Control
+								type='text'
+								name='empleado.matricula'
+								value={formData.empleado.matricula}
+								onChange={handleChange}
+							/>
+						</Form.Group>
+					</Col>
+				</Row>
+				<Row className='mb-3'>
+					<Col>
 						<Form.Group controlId='nombre'>
 							<Form.Label>Nombre *</Form.Label>
 							<Form.Control
@@ -264,8 +278,6 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-				</Row>
-				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='apellido'>
 							<Form.Label>Apellido *</Form.Label>
@@ -278,6 +290,8 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
+				</Row>
+				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='dni'>
 							<Form.Label>DNI *</Form.Label>
@@ -290,8 +304,6 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-				</Row>
-				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='cuil'>
 							<Form.Label>CUIL *</Form.Label>
@@ -304,6 +316,8 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
+				</Row>
+				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='fechaNacimiento'>
 							<Form.Label>Fecha de Nacimiento *</Form.Label>
@@ -316,8 +330,6 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-				</Row>
-				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='telefono'>
 							<Form.Label>Teléfono *</Form.Label>
@@ -368,8 +380,6 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-				</Row>
-				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='barrio'>
 							<Form.Label>Barrio *</Form.Label>
@@ -382,6 +392,8 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
+				</Row>
+				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='localidad'>
 							<Form.Label>Localidad *</Form.Label>
@@ -394,8 +406,6 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-				</Row>
-				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='provinciaId'>
 							<Form.Label>Provincia *</Form.Label>
@@ -416,6 +426,8 @@ const RegEmpleadoPage = () => {
 							</Form.Control>
 						</Form.Group>
 					</Col>
+				</Row>
+				<Row className='mb-3'>
 					<Row className='mb-3'>
 						<Col>
 							<Form.Group controlId='fechaIngreso'>
