@@ -21,7 +21,7 @@ const VistaInstitucionPage = () => {
 				}
 
 				const data = await response.json();
-				setInstitucion(data);
+				setInstitucion(data.institucion);
 				console.log(data);
 			} catch (error) {
 				console.error('Error al obtener institucion:', error.message);
@@ -33,17 +33,17 @@ const VistaInstitucionPage = () => {
 
 	const handleConsultar = (id) => {
 		// 	// Lógica para manejar la acción de consultar
-		console.log(`Consultar empleado con ID ${id}`);
+		console.log(`Consultar institucion con ID ${id}`);
 	};
 
 	const handleModificar = (id) => {
 		// 	// Lógica para manejar la acción de modificar
-		console.log(`Modificar empleado con ID ${id}`);
+		console.log(`Modificar institucion con ID ${id}`);
 	};
 
 	const handleEliminar = (id) => {
 		// Lógica para manejar la acción de eliminar
-		console.log(`Eliminar empleado con ID ${id}`);
+		console.log(`Eliminar insticucion con ID ${id}`);
 	};
 
 	return (
@@ -77,8 +77,8 @@ const VistaInstitucionPage = () => {
 				hover>
 				<thead>
 					<tr>
-						<th>CUE</th>
 						<th>Logo</th>
+						<th>CUE</th>
 						<th>Nombre</th>
 					</tr>
 				</thead>
@@ -87,14 +87,14 @@ const VistaInstitucionPage = () => {
 						instituciones.map((institucion) => (
 							<tr key={institucion.id}>
 								{/* Accede a las propiedades del objeto institucion de acuerdo a la estructura */}
-								<td>{institucion.cue}</td>
+								<td>{institucion.logo}</td>
 								<td>
 									{institucion &&
-										`${institucion.nombre}`}
+										`${institucion.cue}`}
 								</td>
 								<td>
 									{institucion &&
-										institucion.logo}
+										institucion.nombre}
 								</td>
 								<td>
 									<Button
