@@ -21,7 +21,7 @@ const VistaInstitucionPage = () => {
 				}
 
 				const data = await response.json();
-				setInstitucion(data.institucion);
+				setInstitucion(data);
 				console.log(data);
 			} catch (error) {
 				console.error('Error al obtener institucion:', error.message);
