@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { BsEye, BsPencil, BsTrash } from 'react-icons/bs';
 import Link from 'next/link';
+import Modal2 from '../../../components/Modal';
 
 const VistaInstitucionPage = () => {
-	const [instituciones, setInstitucion] = useState([]);
-
+const [instituciones, setInstitucion] = useState([]);
+const [activo, setActivo] = useState(false);
+const [confirmar, setConfirmar] = useState(false);
 	// console.log(institucion);
 
 	useEffect(() => {
@@ -21,7 +23,7 @@ const VistaInstitucionPage = () => {
 				}
 
 				const data = await response.json();
-				setInstitucion(data.institucion);
+				setInstitucion(data);
 				console.log(data);
 			} catch (error) {
 				console.error('Error al obtener institucion:', error.message);
@@ -43,12 +45,15 @@ const VistaInstitucionPage = () => {
 
 	const handleEliminar = (id) => {
 		// Lógica para manejar la acción de eliminar
-		console.log(`Eliminar insticucion con ID ${id}`);
+    setActivo(!activo)
+    if(confirmar){
+      console.log(`Eliminar insticucion con ID ${id}`);
+    }
 	};
 
 	return (
 		<div className='p-3'>
-			<Link href='/dashboard/admin/vistausuarios/regempleado'>
+			<Link href='/dashboard/admin/vistainstitucion/reginstitucion'>
 				<Button
 					variant='flat'
 					style={{
@@ -87,9 +92,9 @@ const VistaInstitucionPage = () => {
 						instituciones.map((institucion) => (
 							<tr key={institucion.id}>
 								{/* Accede a las propiedades del objeto institucion de acuerdo a la estructura */}
-								<td>{institucion.logo}</td>
+								<td><img src={institucion.logo} alt="" style={{width:'50px'}}/></td>
 								<td>
-									{institucion &&
+									   {institucion &&
 										`${institucion.cue}`}
 								</td>
 								<td>
@@ -125,6 +130,7 @@ const VistaInstitucionPage = () => {
 					)}
 				</tbody>
 			</Table>
+    <Modal2 titulo={'Eliminar'} descripcion={'Desea eliminar la institucion?'} primerboton={'Aceptar'} segundoboton={'Cancelar'} valor={setConfirmar} activo={activo}/>
 		</div>
 	);
 };
