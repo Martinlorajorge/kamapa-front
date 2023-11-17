@@ -2,7 +2,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function Modal2({type,isActive}) {
+function Modal2({type,isActive,setActivo,setConfirmar}) {
 
   const typeModal = {
     delete: {
@@ -36,7 +36,7 @@ function Modal2({type,isActive}) {
       style={{ display: isActive?'block':'none', position: 'absolute', margin:'auto'}}
     >
       <Modal.Dialog>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton onHide={() => setActivo(false)}>
           <Modal.Title>{titulo}</Modal.Title>
         </Modal.Header>
 
@@ -45,8 +45,8 @@ function Modal2({type,isActive}) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary"  >{segundoboton}</Button>
-          <Button variant="primary">{primerboton}</Button>
+          <Button variant="secondary" onClick={()=>setActivo(false)} >{segundoboton}</Button>
+          <Button variant="primary" onClick={()=>setConfirmar(true)}>{primerboton}</Button>
         </Modal.Footer>
       </Modal.Dialog>
     </div>
