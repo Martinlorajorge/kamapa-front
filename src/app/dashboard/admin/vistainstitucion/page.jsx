@@ -4,11 +4,14 @@ import { Button, Table } from 'react-bootstrap';
 import { BsEye, BsPencil, BsTrash } from 'react-icons/bs';
 import Link from 'next/link';
 import Modal2 from '../../../components/Modal';
+import { ModalType } from '../../../../utils/const';
 
 const VistaInstitucionPage = () => {
 const [instituciones, setInstitucion] = useState([]);
 const [activo, setActivo] = useState(false);
 const [confirmar, setConfirmar] = useState(false);
+const [type, setType] = useState('');
+
 	// console.log(institucion);
 
 	useEffect(() => {
@@ -41,14 +44,14 @@ const [confirmar, setConfirmar] = useState(false);
 	const handleModificar = (id) => {
 		// 	// Lógica para manejar la acción de modificar
 		console.log(`Modificar institucion con ID ${id}`);
+		setActivo(true);
+		setType(ModalType.Edit);
 	};
 
 	const handleEliminar = (id) => {
 		// Lógica para manejar la acción de eliminar
-    setActivo(!activo)
-    if(confirmar){
-      console.log(`Eliminar insticucion con ID ${id}`);
-    }
+		setActivo(true);
+		setType(ModalType.Delete);
 	};
 
 	return (
@@ -130,7 +133,8 @@ const [confirmar, setConfirmar] = useState(false);
 					)}
 				</tbody>
 			</Table>
-    <Modal2 titulo={'Eliminar'} descripcion={'Desea eliminar la institucion?'} primerboton={'Aceptar'} segundoboton={'Cancelar'} valor={setConfirmar} activo={activo}/>
+    		{type && <Modal2 type={type} isActive={activo} />}
+
 		</div>
 	);
 };

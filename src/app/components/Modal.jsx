@@ -2,11 +2,38 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function Modal2({titulo,descripcion, primerboton,segundoboton,valor, activo}) {
-  return (
+function Modal2({type,isActive}) {
+
+  const typeModal = {
+    delete: {
+      titulo: 'Eliminar',
+      descripcion: '¿Está seguro que desea eliminar el registro?',
+      primerboton: 'Eliminar',
+      segundoboton: 'Cancelar'
+    },
+    edit: {
+      titulo: 'Modificar',
+      descripcion: '¿Está seguro que desea modificar el registro?',
+      primerboton: 'Modificar',
+      segundoboton: 'Cancelar'
+    },
+    view: {
+      titulo: 'Ver los datos',
+      descripcion: '¿Está seguro que desea Ver el registro?',
+      primerboton: 'Volver',
+      segundoboton: 'Cancelar'
+    }
+  }
+
+
+
+  const {titulo, descripcion, primerboton, segundoboton} = typeModal[type];
+
+
+  return type == 'delete'? (
     <div
       className="modal show"
-      style={{ display: activo?'block':'none', position: 'absolute', margin:'auto'}}
+      style={{ display: isActive?'block':'none', position: 'absolute', margin:'auto'}}
     >
       <Modal.Dialog>
         <Modal.Header closeButton>
@@ -18,11 +45,15 @@ function Modal2({titulo,descripcion, primerboton,segundoboton,valor, activo}) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={valor=false}>{primerboton}</Button>
-          <Button variant="primary" onClick={valor=true}>{segundoboton}</Button>
+          <Button variant="secondary"  >{segundoboton}</Button>
+          <Button variant="primary">{primerboton}</Button>
         </Modal.Footer>
       </Modal.Dialog>
     </div>
+  ):(
+  <div>
+    <h1>Soy modificar </h1>
+  </div>
   );
 }
 
