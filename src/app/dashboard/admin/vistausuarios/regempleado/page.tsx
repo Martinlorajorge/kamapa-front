@@ -198,7 +198,7 @@ const RegEmpleadoPage = () => {
 			if (response.ok) {
 				const data = await response.json();
 				setProvincias(data);
-				console.log('Provincias cargadas:', data);
+				// console.log('Provincias cargadas:', data);
 			} else {
 				console.error('Error al cargar las provincias:', response.statusText);
 				// Puedes actualizar el estado aquí con un mensaje de error
@@ -412,15 +412,19 @@ const RegEmpleadoPage = () => {
 							<Form.Control
 								as='select'
 								name='domicilio.provinciaId'
-								value={formData.domicilio.provinciaId}
+								value={formData?.domicilio?.provinciaId || ''}
 								onChange={handleChange}
 								required>
-								<option value=''>Selecciona una provincia</option>
+								<option
+									value=''
+									disabled>
+									Selecciona una provincia
+								</option>
 								{provincias.map((provincia) => (
 									<option
 										key={provincia.id}
 										value={provincia.id}>
-										{provincia.provincia}
+										{provincia?.provincia}
 									</option>
 								))}
 							</Form.Control>
