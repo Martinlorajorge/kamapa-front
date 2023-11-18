@@ -1,15 +1,13 @@
 'use client';
 // Importa useState y useEffect desde 'react'
 import React, { useState, useEffect } from 'react';
-
-// Importa los tipos necesarios de react-bootstrap y next-auth/react
 import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 
 // Define la interfaz para el objeto de provincia
 interface Provincia {
 	id: string;
-	nombre: string;
+	provincia: string;
 }
 
 // Define la interfaz para el formulario
@@ -32,7 +30,7 @@ interface FormData {
 		create_for: string;
 		update_for: string;
 		password: string;
-		rolId: number;
+		rolId: string;
 	};
 	domicilio: {
 		calle: string;
@@ -49,7 +47,7 @@ interface FormData {
 
 const RegEmpleadoPage = () => {
 	// Usa el hook useSession de next-auth/react para obtener la sesión actual
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
 
 	// Estado para almacenar las provincias
 	const [provincias, setProvincias] = useState<Provincia[]>([]);
@@ -80,14 +78,14 @@ const RegEmpleadoPage = () => {
 			create_for: `${session?.user?.user?.nombre}`,
 			update_for: '',
 			password: '',
-			rolId: `${session?.user?.rols?.name}`,
+			rolId: `${session?.user?.rols?.id}`,
 		},
 		domicilio: {
 			calle: '',
 			numero: '',
 			barrio: '',
 			localidad: '',
-			provinciaId: '1',
+			provinciaId: '',
 		},
 		contacto: {
 			contacto: '',
@@ -124,6 +122,7 @@ const RegEmpleadoPage = () => {
 			}));
 		}
 	};
+
 	// Función para enviar el formulario al servidor
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -161,14 +160,14 @@ const RegEmpleadoPage = () => {
 						create_for: `${session?.user?.user?.nombre}`,
 						update_for: '',
 						password: '',
-						rolId: `${session?.user?.rols?.name}`,
+						rolId: `${session?.user?.rols?.id}`,
 					},
 					domicilio: {
 						calle: '',
 						numero: '',
 						barrio: '',
 						localidad: '',
-						provinciaId: '1',
+						provinciaId: '',
 					},
 					contacto: {
 						contacto: '',
@@ -198,14 +197,11 @@ const RegEmpleadoPage = () => {
 			if (response.ok) {
 				const data = await response.json();
 				setProvincias(data);
-				console.log('Provincias cargadas:', data);
 			} else {
 				console.error('Error al cargar las provincias:', response.statusText);
-				// Puedes actualizar el estado aquí con un mensaje de error
 			}
 		} catch (error) {
 			console.error('Error al cargar las provincias:', error);
-			// Puedes actualizar el estado aquí con un mensaje de error
 		}
 	};
 
@@ -225,11 +221,9 @@ const RegEmpleadoPage = () => {
 					setRoles(data);
 				} else {
 					console.error('Error al cargar los roles:', response.statusText);
-					// Puedes manejar el error según tus necesidades
 				}
 			} catch (error) {
 				console.error('Error al cargar los roles:', error);
-				// Puedes manejar el error según tus necesidades
 			}
 		};
 
@@ -406,21 +400,27 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
+				</Row>
+				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='provinciaId'>
 							<Form.Label>Provincia *</Form.Label>
 							<Form.Control
 								as='select'
 								name='domicilio.provinciaId'
-								value={formData.domicilio.provinciaId}
+								value={formData?.domicilio?.provinciaId || ''}
 								onChange={handleChange}
 								required>
-								<option value=''>Selecciona una provincia</option>
+								<option
+									value=''
+									disabled>
+									Selecciona una provincia
+								</option>
 								{provincias.map((provincia) => (
 									<option
 										key={provincia.id}
 										value={provincia.id}>
-										{provincia.provincia}
+										{provincia?.provincia}
 									</option>
 								))}
 							</Form.Control>
