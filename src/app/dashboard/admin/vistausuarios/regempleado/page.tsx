@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 // Define la interfaz para el objeto de provincia
 interface Provincia {
@@ -400,8 +401,6 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-				</Row>
-				<Row className='mb-3'>
 					<Col>
 						<Form.Group controlId='provinciaId'>
 							<Form.Label>Provincia *</Form.Label>
@@ -450,7 +449,11 @@ const RegEmpleadoPage = () => {
 									value={formData.rols?.id}
 									onChange={handleChange}
 									required>
-									<option value=''>Selecciona un Rol para el empleado</option>
+									<option
+										disabled
+										value=''>
+										Selecciona un Rol para el empleado
+									</option>
 									{roles.map((rol) => (
 										<option
 											key={rol.id}
@@ -465,26 +468,45 @@ const RegEmpleadoPage = () => {
 				</Row>
 
 				{/* Botón para enviar el formulario */}
-				<Button
-					variant='flat'
-					type='submit'
-					style={{
-						backgroundColor: 'purple',
-						color: 'white',
-						padding: '0.4rem 1rem',
-						fontSize: '1rem',
-						transition: 'all 0.3s ease',
-					}}
-					onMouseEnter={(e) => {
-						e.currentTarget.style.backgroundColor = 'white';
-						e.currentTarget.style.color = 'black';
-					}}
-					onMouseLeave={(e) => {
-						e.currentTarget.style.backgroundColor = 'purple';
-						e.currentTarget.style.color = 'white';
-					}}>
-					Registrar Empleado
-				</Button>
+				<Row className='mb-3'>
+					<Col>
+						<Button
+							variant='flat'
+							type='submit'
+							style={{
+								backgroundColor: 'purple',
+								color: 'white',
+								padding: '0.4rem 1rem',
+								fontSize: '1rem',
+								transition: 'all 0.3s ease',
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.backgroundColor = 'white';
+								e.currentTarget.style.color = 'black';
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.backgroundColor = 'purple';
+								e.currentTarget.style.color = 'white';
+							}}>
+							Registrar Empleado
+						</Button>
+					</Col>
+					<Col>
+						{/* Botón para volver */}
+						<Link href={`/dashboard/${session?.user?.rol?.name}/vistausuarios`}>
+							<Button
+								variant='secondary'
+								style={{
+									marginRight: '10px',
+									padding: '0.4rem 1rem',
+									fontSize: '1rem',
+									transition: 'all 0.3s ease',
+								}}>
+								Volver
+							</Button>
+						</Link>
+					</Col>
+				</Row>
 			</Form>
 
 			<Modal
