@@ -1,41 +1,34 @@
 'use client';
-import { useSession } from 'next-auth/react';
-import Loading from '../components/Loading';
+// Importa los módulos necesarios
+import { useSession, signOut } from 'next-auth/react';
 import { Card, Button } from 'react-bootstrap';
 import Link from 'next/link';
+import Loading from '../components/Loading';
 
 const Dashboard = () => {
+	// Obtiene la sesión del usuario
 	const { data: session, status } = useSession();
 
-	// si el estado de la pag esta cargando muestra el componente Loading
+	// Si el estado de la página está cargando, muestra el componente Loading
 	if (status === 'loading') {
 		return <Loading />;
 	}
 
-	// traigo los datos del usuario para mostrarlos al hacer click en el boton (por ahora) y ver si trae el tpken y el beaarer esta bien configurado para que haya persistencia en la session
-	const getUsuario = async () => {
-		try {
-			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/usuario`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${session?.user?.token}`,
-					},
-				},
-			);
-			const data = await res.json();
-			console.log(data);
-		} catch (error) {
-			console.error('Error al obtener datos del usuario:', error);
-		}
+	// Función para cerrar sesión
+	const handleLogout = async () => {
+		await signOut(); // Utiliza signOut directamente desde next-auth/react
+		window.location.href = '/login'; // Redirige a la página de inicio de sesión
 	};
+
+	// Si no hay sesión, redirige a la página de inicio de sesión
+	if (!session) {
+		return <Loading />;
+	}
 
 	return (
 		<div className='d-flex justify-content-center align-items-center mt-5'>
 			<Card className='text-center'>
-				<Card.Header>Panel {session.user?.rol?.name}</Card.Header>
+				<Card.Header>Panel {session.user?.rols?.name}</Card.Header>
 				<Card.Body>
 					<Card.Title>
 						Bienvenido, {session?.user?.user?.nombre}{' '}
@@ -46,6 +39,7 @@ const Dashboard = () => {
 						<strong>Teléfono:</strong> {session?.user?.user?.telefono}
 					</Card.Text>
 
+					{/* Enlace a la ruta específica según el rol */}
 					<Link href={`/dashboard/${session.user?.rol?.name}`}>
 						<Button
 							variant='flat'
@@ -68,6 +62,19 @@ const Dashboard = () => {
 							Comencemos
 						</Button>
 					</Link>
+
+					{/* Botón para cerrar sesión */}
+					{/* <Button
+						variant='danger'
+						onClick={handleLogout}
+						style={{
+							marginTop: '1rem',
+							padding: '0.4rem 1rem',
+							fontSize: '1rem',
+							transition: 'all 0.3s ease',
+						}}>
+						Cerrar sesión
+					</Button> */}
 				</Card.Body>
 				<Card.Footer className='text-muted'>
 					{session ? 'Sesión activa' : 'No hay sesión activa'}
