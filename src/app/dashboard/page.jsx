@@ -22,13 +22,14 @@ const Dashboard = () => {
 
 	// Si no hay sesión, redirige a la página de inicio de sesión
 	if (!session) {
-		return <Loading />;
+		window.location.href = '/login';
+		return null;
 	}
 
 	return (
 		<div className='d-flex justify-content-center align-items-center mt-5'>
 			<Card className='text-center'>
-				<Card.Header>Panel {session.user?.rols?.name}</Card.Header>
+				<Card.Header>Panel {session.user?.rol?.name}</Card.Header>
 				<Card.Body>
 					<Card.Title>
 						Bienvenido, {session?.user?.user?.nombre}{' '}

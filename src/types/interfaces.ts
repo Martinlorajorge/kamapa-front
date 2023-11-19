@@ -5,7 +5,7 @@ export interface User {
     dni?: string;
     email?: string;
     password: string;
-    role: string;
+    rol: string;
     accessToken?: string;
     // Puedes agregar más propiedades según las necesidades de tu aplicación
   }

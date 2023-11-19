@@ -1,8 +1,0 @@
-{
-	"admin": ["/dashboard/admin", "/dashboard/common"],
-	"director": ["/dashboard/director", "/dashboard/common"],
-	"secretario": ["/dashboard/secretario", "/dashboard/common"],
-	"preceptor": ["/dashboard/preceptor", "/dashboard/common"],
-	"docente": ["/dashboard/docente", "/dashboard/common"],
-	"alumno": ["/dashboard/alumno", "/dashboard/common"]
-}
