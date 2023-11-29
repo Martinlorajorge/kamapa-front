@@ -6,13 +6,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from '../components/Loading'; // Importa el componente de carga
 
 export default function RootLayout({ children }) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (session) {
       // Aquí debes definir las rutas permitidas para cada rol
       const allowedRoutes = {
-        'admin': ['/dashboard', '/dashboard/admin'],
+        'admin': ['/dashboard', 
+        '/dashboard/admin',
+        '/dashboard/admin/vistainstitucion',
+        '/dashboard/admin/vistainstitucion/reginstitucion',
+        '/dashboard/admin/vistausuario',
+        '/dashboard/admin/vistausuario/regempleado'
+      ],
         'director': ['/dashboard', '/dashboard/director'],
         'secretario': ['/dashboard', '/dashboard/secretario'],
         'preceptor': ['/dashboard', '/dashboard/preceptor'],
