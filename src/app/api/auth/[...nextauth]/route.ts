@@ -8,7 +8,7 @@ const handler = NextAuth({
 			name: 'Credentials',
 			credentials: {
 				dni: { label: 'dni', type: 'text', placeholder: 'Ingresa tu DNI' },
-				password: { label: 'Password', type: 'password' },
+				password: { label: 'Password', type: 'password', autocomplete: "current-password" },
 			},
 			async authorize(credentials) {
 				// Aquí viene el usuario del servidor
@@ -31,25 +31,6 @@ const handler = NextAuth({
 
 				console.log(user);
 				return user;
-				// hasta aquí debo comentar si quiero usar el de prueba que esta abajo
-
-				// Desde aquí para empezar a usar el usuario de prueba
-				/*
-        if (credentials.dni === '12345678' && credentials.password === '123123') {
-          // Usuario provisional autenticado
-          const user = {
-            id: 1,
-            name: 'Martin Lora',
-            dni: '12345678'
-            // Puedes agregar más propiedades del usuario si es necesario
-          }
-          return user
-        } else {
-          // Usuario no autorizado
-          throw new Error('Credenciales inválidas')
-        }
-*/
-				// Hasta Aquí hay que comentar si queremos usar el servidor
 			},
 		}),
 	],

@@ -67,7 +67,9 @@ const LoginPage = () => {
               className="form-control mb-2"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
             />
+
             <style type='text/css'>
                     {`
                     .btn-flat {
