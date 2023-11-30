@@ -9,6 +9,7 @@ const VistaEmpleadosPage = () => {
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,53 +43,70 @@ const VistaEmpleadosPage = () => {
     setShowEditModal(true);
   };
 
-  const handleEliminar = (id) => {
-    console.log(`Eliminar empleado con ID ${id}`);
+
+  const handleConfirmDelete = async () => {
+    setShowConfirmModal(false); // Cierra el modal de confirmación
+  
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
+        {
+          method: 'DELETE',
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+  
+      setEmpleados(empleados.filter((empleado) => empleado.id !== selectedEmpleado.id));
+      console.log(`Empleado con ID ${selectedEmpleado.id} eliminado`);
+    } catch (error) {
+      console.error('Error al eliminar empleado:', error.message);
+    }
   };
 
-  
+  const handleEliminar = (empleado) => {
+  setSelectedEmpleado(empleado);
+  setShowConfirmModal(true); // Muestra el modal de confirmación
+};
+
   const handleSave = async () => {
-	try {
-	  // Obtén los valores del formulario
-	  const legajo = document.getElementById('formLegajo').value;
-	  // Agrega más campos según sea necesario
-  
-	  // Crea el objeto con los datos actualizados
-	  const updatedEmpleado = {
-		...selectedEmpleado,
-		UsuarioEmpleado: {
-		  ...selectedEmpleado.UsuarioEmpleado,
-		  legajo: legajo,
-		  // Agrega más campos según sea necesario
-		},
-	  };
-  
-	  // Haz la solicitud HTTP para actualizar los datos
-	  const response = await fetch(
-		`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
-		{
-		  method: 'PUT', // o 'PATCH' si solo estás actualizando algunos campos
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-		  body: JSON.stringify(updatedEmpleado),
-		}
-	  );
-  
-	  if (!response.ok) {
-		throw new Error(`Error ${response.status}: ${response.statusText}`);
-	  }
-  
-	  // Actualiza el estado de los empleados con los datos actualizados
-	  setEmpleados(empleados.map(empleado =>
-		empleado.id === selectedEmpleado.id ? updatedEmpleado : empleado
-	  ));
-  
-	  console.log(`Empleado con ID ${selectedEmpleado.id} actualizado`);
-	  setShowEditModal(false);
-	} catch (error) {
-	  console.error('Error al actualizar empleado:', error.message);
-	}
+    try {
+      const legajo = document.getElementById('formLegajo').value;
+      const updatedEmpleado = {
+        ...selectedEmpleado,
+        UsuarioEmpleado: {
+          ...selectedEmpleado.UsuarioEmpleado,
+          legajo: legajo,
+        },
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedEmpleado),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      setEmpleados(
+        empleados.map((empleado) =>
+          empleado.id === selectedEmpleado.id ? updatedEmpleado : empleado
+        )
+      );
+      console.log(`Empleado con ID ${selectedEmpleado.id} actualizado`);
+      setShowEditModal(false);
+    } catch (error) {
+      console.error('Error al actualizar empleado:', error.message);
+    }
   };
 
   return (
@@ -216,6 +234,23 @@ const VistaEmpleadosPage = () => {
           </Button>
           <Button variant="primary" onClick={handleSave}>
             Guardar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que quieres eliminar a este empleado?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+            No
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Sí, eliminar
           </Button>
         </Modal.Footer>
       </Modal>

@@ -40,7 +40,7 @@ export default function AdminPage() {
 					<Card style={{ backgroundColor: '#a99aff' }}>
 						<CardBody>
 							<CardTitle style={{ textAlign: 'center' }}>Institución</CardTitle>
-							<CardSubtitle>Administra los productos de tu tienda</CardSubtitle>
+							<CardSubtitle>Administra las Instituciones Registradas</CardSubtitle>
 							{/* Utiliza el componente Link para los enlaces */}
 							<Link href='/dashboard/admin/vistainstitucion'>
 								<Button
@@ -56,7 +56,7 @@ export default function AdminPage() {
 					<Card style={{ backgroundColor: '#9f8cf6' }}>
 						<CardBody>
 							<CardTitle style={{ textAlign: 'center' }}>Roles</CardTitle>
-							<CardSubtitle>Revisa los pedidos de tus clientes</CardSubtitle>
+							<CardSubtitle>Asignacion de vistas Segun el Rol</CardSubtitle>
 							{/* Utiliza el componente Link para los enlaces */}
 							<Link href='/admin/roles'>
 								<Button
@@ -72,7 +72,7 @@ export default function AdminPage() {
 					<Card style={{ backgroundColor: '#8f7cf3' }}>
 						<CardBody>
 							<CardTitle style={{ textAlign: 'center' }}>Reportes</CardTitle>
-							<CardSubtitle>Obtén información sobre tu negocio</CardSubtitle>
+							<CardSubtitle>Estadísticas de Usuarios & Instituciones Registrados</CardSubtitle>
 							{/* Utiliza el componente Link para los enlaces */}
 							<Link href='/admin/reports'>
 								<Button

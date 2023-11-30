@@ -1,12 +1,14 @@
-'use client';
+'use client'
 import React, { Suspense, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation'; // Importa useRouter
 import { Navigation } from '../components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Loading from '../components/Loading'; // Importa el componente de carga
 
 export default function RootLayout({ children }) {
   const { data: session } = useSession();
+  const router = useRouter(); // Agrega esta línea
 
   useEffect(() => {
     if (session) {
@@ -28,12 +30,12 @@ export default function RootLayout({ children }) {
       };
 
       const userRole = session.user?.rol?.name;
-      const currentPath = window.location.pathname;
+      const currentPath = router.pathname; // Usa router.pathname en lugar de window.location.pathname
       if (!allowedRoutes[userRole].includes(currentPath)) {
-        window.location.replace('/dashboard');
+        router.replace('/dashboard'); // Usa router.replace en lugar de window.location.replace
       }
     }
-  }, [session]);
+  }, [session, router]); // Agrega router a la lista de dependencias
 
   return (
     <>

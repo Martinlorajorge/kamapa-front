@@ -18,11 +18,11 @@ const Dashboard = () => {
     return null;
   }
 
-  // Función para cerrar sesión
-  const handleLogout = async () => {
-    await signOut(); // Utiliza signOut directamente desde next-auth/react
-    window.location.replace('/login'); // Redirige a la página de inicio de sesión
-  };
+  // // Función para cerrar sesión
+  // const handleLogout = async () => {
+  //   await signOut(); // Utiliza signOut directamente desde next-auth/react
+  //   window.location.replace('/login'); // Redirige a la página de inicio de sesión
+  // };
 
 
   return (
