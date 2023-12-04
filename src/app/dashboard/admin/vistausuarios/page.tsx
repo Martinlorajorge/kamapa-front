@@ -45,26 +45,25 @@ const VistaEmpleadosPage = () => {
 	};
 
 	const handleConfirmDelete = async () => {
-		setShowConfirmModal(false); // Cierra el modal de confirmación
-
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado}`,
 				{
 					method: 'DELETE',
 				},
 			);
-
+			console.log(selectedEmpleado);
 			if (!response.ok) {
-				throw new Error(`Error ${response.status}: ${response.statusText}`);
+				const errorData = await response.json();
+				console.log('Error status:', response.status);
+				console.log('Error data:', errorData);
+				throw new Error('Error en la eliminación');
 			}
 
-			setEmpleados(
-				empleados.filter((empleado) => empleado.id !== selectedEmpleado.id),
-			);
-			console.log(`Empleado con ID ${selectedEmpleado.id} eliminado`);
+			setEmpleados(empleados.filter((emp) => emp.id !== selectedEmpleado));
+			setShowConfirmModal(false);
 		} catch (error) {
-			console.error('Error al eliminar empleado:', error.message);
+			console.log(error);
 		}
 	};
 
@@ -80,19 +79,30 @@ const VistaEmpleadosPage = () => {
 
 	const handleConfirmSave = async () => {
 		try {
+			// Obtén los valores de los campos del formulario
 			const legajo = (document.getElementById('formLegajo') as HTMLInputElement)
 				.value;
+			const nombre = (document.getElementById('formNombre') as HTMLInputElement)
+				.value;
+			const apellido = (
+				document.getElementById('formApellido') as HTMLInputElement
+			).value;
 			// Agrega más campos según sea necesario
 
+			// Crea el objeto empleado actualizado
 			const updatedEmpleado = {
 				...selectedEmpleado,
 				UsuarioEmpleado: {
 					...selectedEmpleado.UsuarioEmpleado,
 					legajo: legajo,
+					nombre: nombre,
+					apellido: apellido,
 					// Agrega más campos según sea necesario
 				},
 			};
 
+			console.log(updatedEmpleado);
+			// Realiza la solicitud PUT a la API
 			const response = await fetch(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
 				{
@@ -103,26 +113,32 @@ const VistaEmpleadosPage = () => {
 					body: JSON.stringify(updatedEmpleado),
 				},
 			);
-			console.log(updatedEmpleado);
+			console.log(selectedEmpleado);
+			console.log(response);
+
 			if (!response.ok) {
-				throw new Error(`Error ${response.status}: ${response.statusText}`);
+				const errorData = await response.json();
+				console.log('Error status:', response.status);
+				console.log('Error data:', errorData);
+				throw new Error('Error en la modificación');
 			}
 
+			// Actualiza el estado de los empleados
 			const data = await response.json();
-			console.log('Response:', data);
-
 			setEmpleados((prevEmpleados) =>
 				prevEmpleados.map((empleado) =>
-					empleado.id === selectedEmpleado.id ? data : empleado,
+					empleado.id === updatedEmpleado ? data : empleado,
 				),
 			);
-			console.log(`Empleado con ID ${selectedEmpleado.id} actualizado`);
+
+			// Cierra el modal
 			setShowEditModal(false);
-			setShowSaveConfirmModal(false); // Cierra el modal de confirmación de guardado
+			setShowSaveConfirmModal(false);
 		} catch (error) {
 			console.error('Error al actualizar empleado:', error.message);
 		}
 	};
+
 	return (
 		<div className='p-3'>
 			<Link href='/dashboard/admin/vistausuarios/regempleado'>
@@ -167,11 +183,11 @@ const VistaEmpleadosPage = () => {
 								<td>{empleado?.UsuarioEmpleado?.legajo}</td>
 								<td>
 									{empleado.UsuarioEmpleado &&
-										`${empleado.UsuarioEmpleado.nombre}, ${empleado.UsuarioEmpleado.apellido}`}
+										`${empleado?.UsuarioEmpleado?.nombre}, ${empleado?.UsuarioEmpleado?.apellido}`}
 								</td>
 								<td>
 									{empleado.UsuarioEmpleado &&
-										empleado.UsuarioEmpleado.telefono}
+										empleado?.UsuarioEmpleado?.telefono}
 								</td>
 								<td>
 									<Button
@@ -272,6 +288,20 @@ const VistaEmpleadosPage = () => {
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.legajo}
 								/>
 							</Form.Group>
+							<Form.Group controlId='formNombre'>
+								<Form.Label>Nombre</Form.Label>
+								<Form.Control
+									type='text'
+									defaultValue={selectedEmpleado?.UsuarioEmpleado?.nombre}
+								/>
+							</Form.Group>
+							<Form.Group controlId='formApellido'>
+								<Form.Label>Apellido</Form.Label>
+								<Form.Control
+									type='text'
+									defaultValue={selectedEmpleado?.UsuarioEmpleado?.apellido}
+								/>
+							</Form.Group>
 							{/* Agrega más campos de formulario según sea necesario */}
 						</Form>
 					)}
@@ -286,29 +316,6 @@ const VistaEmpleadosPage = () => {
 						variant='primary'
 						onClick={handleSave}>
 						Guardar
-					</Button>
-				</Modal.Footer>
-			</Modal>
-
-			<Modal
-				show={showConfirmModal}
-				onHide={() => setShowConfirmModal(false)}>
-				<Modal.Header closeButton>
-					<Modal.Title>Confirmar eliminación</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					¿Estás seguro de que quieres eliminar a este empleado?
-				</Modal.Body>
-				<Modal.Footer>
-					<Button
-						variant='secondary'
-						onClick={() => setShowConfirmModal(false)}>
-						No
-					</Button>
-					<Button
-						variant='danger'
-						onClick={handleConfirmDelete}>
-						Sí, eliminar
 					</Button>
 				</Modal.Footer>
 			</Modal>
@@ -332,6 +339,32 @@ const VistaEmpleadosPage = () => {
 						variant='primary'
 						onClick={handleConfirmSave}>
 						Confirmar
+					</Button>
+				</Modal.Footer>
+			</Modal>
+
+			<Modal
+				show={showConfirmModal}
+				onHide={() => setShowConfirmModal(false)}>
+				<Modal.Header closeButton>
+					<Modal.Title>Confirmar eliminación</Modal.Title>
+				</Modal.Header>
+
+				<Modal.Body>
+					¿Estás seguro de que quieres eliminar a este empleado?
+				</Modal.Body>
+
+				<Modal.Footer>
+					<Button
+						variant='secondary'
+						onClick={() => setShowConfirmModal(false)}>
+						No
+					</Button>
+
+					<Button
+						variant='danger'
+						onClick={handleConfirmDelete}>
+						Sí, eliminar
 					</Button>
 				</Modal.Footer>
 			</Modal>

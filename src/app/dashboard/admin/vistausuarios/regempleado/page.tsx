@@ -231,6 +231,8 @@ const RegEmpleadoPage = () => {
 		fetchRoles();
 	}, []);
 
+	console.log(formData?.rols?.id);
+
 	return (
 		<Container className='p-3'>
 			<Form onSubmit={handleSubmit}>

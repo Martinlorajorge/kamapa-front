@@ -8,7 +8,11 @@ const handler = NextAuth({
 			name: 'Credentials',
 			credentials: {
 				dni: { label: 'dni', type: 'text', placeholder: 'Ingresa tu DNI' },
-				password: { label: 'Password', type: 'password', autocomplete: "current-password" },
+				password: {
+					label: 'Password',
+					type: 'password',
+					autocomplete: 'current-password',
+				},
 			},
 			async authorize(credentials) {
 				// Aquí viene el usuario del servidor
