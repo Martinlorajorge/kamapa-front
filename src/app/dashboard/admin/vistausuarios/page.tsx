@@ -70,78 +70,70 @@ const VistaEmpleadosPage = () => {
 	const handleModificar = (empleado) => {
 		setSelectedEmpleado(empleado);
 		setShowEditModal(true);
-	};
-
-	const handleSave = () => {
+	  };
+	  
+	  const handleSave = () => {
 		// Muestra el modal de confirmación de guardado en lugar de guardar directamente
 		setShowSaveConfirmModal(true);
-	};
-
-	const handleConfirmSave = async () => {
+	  };
+	  
+	  const handleConfirmSave = async () => {
 		try {
-			// Obtén los valores de los campos del formulario
-			const legajo = (document.getElementById('formLegajo') as HTMLInputElement)
-				.value;
-			const nombre = (document.getElementById('formNombre') as HTMLInputElement)
-				.value;
-			const apellido = (
-				document.getElementById('formApellido') as HTMLInputElement
-			).value;
-			// Agrega más campos según sea necesario
-
-
-			// console.log(selectedEmpleado)
-			// Crea el objeto empleado actualizado
-
-			
-			const updatedEmpleado = {
-				...selectedEmpleado,
-				usuario: {
-					usuarioId : selectedEmpleado.id,
-					legajo: legajo,
-					nombre: nombre,
-					apellido: apellido,
-					// Agrega más campos según sea necesario
-				},
-			};
-
-			console.log(updatedEmpleado);
-			// Realiza la solicitud PUT a la API
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
-				{
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json', // Asegúrate de que el servidor sepa que estás enviando JSON
-					},
-					body: JSON.stringify(updatedEmpleado),
-				},
-			)
-			
-			// Actualiza el estado de los empleados
-			const data = await response.json();
-			console.log(data);
-
-			if (!response.ok) {
-				const errorData = await response.json();
-				console.log('Error status:', response.status);
-				console.log('Error data:', errorData);
-				throw new Error('Error en la modificación');
+		  // Obtén los valores de los campos del formulario
+		  const legajo = (document.getElementById('formLegajo') as HTMLInputElement)?.value;
+		  const nombre = (document.getElementById('formNombre') as HTMLInputElement)?.value;
+		  const apellido = (document.getElementById('formApellido') as HTMLInputElement)?.value;
+		  // Agrega más campos según sea necesario
+	  
+		  // Crea el objeto empleado actualizado
+		  const updatedEmpleado = {
+			...selectedEmpleado,
+			usuario: {
+			  usuarioId: selectedEmpleado,
+			  legajo: legajo,
+			  nombre: nombre,
+			  apellido: apellido,
+			  // Agrega más campos según sea necesario
+			},
+		  };
+	  
+		  // Realiza la solicitud PUT a la API
+		  const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
+			{
+			  method: 'PUT',
+			  headers: {
+				'Content-Type': 'application/json', // Asegúrate de que el servidor sepa que estás enviando JSON
+			  },
+			  body: JSON.stringify(updatedEmpleado),
 			}
-
-			setEmpleados((prevEmpleados) =>
-				prevEmpleados.map((empleado) =>
-					empleado.id === updatedEmpleado ? data : empleado,
-				),
-			);
-
-			// Cierra el modal
-			setShowEditModal(false);
-			setShowSaveConfirmModal(false);
+		  );
+	  
+		  if (!response.ok) {
+			const errorData = await response.json();
+			console.log('Error status:', response.status);
+			console.log('Error data:', errorData);
+			throw new Error('Error en la modificación');
+		  }
+	  
+		  // Actualiza el estado de los empleados
+		  setEmpleados(() => {
+			return empleados.map((emp) => {
+			  if (emp.id === selectedEmpleado.id) {
+				return updatedEmpleado;
+			  }
+			  return emp;
+			});
+		  });
+	  
+		  // Cerrar modales
+		  setShowEditModal(false);
+		  setShowSaveConfirmModal(false);
 		} catch (error) {
-			console.error('Error al actualizar empleado:', error.message);
+		  // Manejar error
+		  console.error('Error al actualizar empleado:', error.message);
 		}
-	};
+	  };
 
 	return (
 		<div className='p-3'>
