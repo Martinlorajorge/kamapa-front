@@ -41,7 +41,7 @@ const VistaEmpleadosPage = () => {
 
 	const handleEliminar = (empleado) => {
 		setSelectedEmpleado(empleado);
-		setShowConfirmModal(true); // Muestra el modal de confirmación
+		setShowConfirmModal(true);
 	};
 
 	const handleConfirmDelete = async () => {
@@ -53,6 +53,7 @@ const VistaEmpleadosPage = () => {
 				},
 			);
 			console.log(selectedEmpleado);
+
 			if (!response.ok) {
 				const errorData = await response.json();
 				console.log('Error status:', response.status);
@@ -70,70 +71,61 @@ const VistaEmpleadosPage = () => {
 	const handleModificar = (empleado) => {
 		setSelectedEmpleado(empleado);
 		setShowEditModal(true);
-	  };
-	  
-	  const handleSave = () => {
-		// Muestra el modal de confirmación de guardado en lugar de guardar directamente
+	};
+
+	const handleSave = () => {
 		setShowSaveConfirmModal(true);
-	  };
-	  
-	  const handleConfirmSave = async () => {
+	};
+
+	const handleConfirmSave = async () => {
 		try {
-		  // Obtén los valores de los campos del formulario
-		  const legajo = (document.getElementById('formLegajo') as HTMLInputElement)?.value;
-		  const nombre = (document.getElementById('formNombre') as HTMLInputElement)?.value;
-		  const apellido = (document.getElementById('formApellido') as HTMLInputElement)?.value;
-		  // Agrega más campos según sea necesario
-	  
-		  // Crea el objeto empleado actualizado
-		  const updatedEmpleado = {
-			...selectedEmpleado,
-			usuario: {
-			  usuarioId: selectedEmpleado,
-			  legajo: legajo,
-			  nombre: nombre,
-			  apellido: apellido,
-			  // Agrega más campos según sea necesario
-			},
-		  };
-	  
-		  // Realiza la solicitud PUT a la API
-		  const response = await fetch(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
-			{
-			  method: 'PUT',
-			  headers: {
-				'Content-Type': 'application/json', // Asegúrate de que el servidor sepa que estás enviando JSON
-			  },
-			  body: JSON.stringify(updatedEmpleado),
+			const legajo = document.getElementById('formLegajo')?.value;
+			const nombre = document.getElementById('formNombre')?.value;
+			const apellido = document.getElementById('formApellido')?.value;
+
+			const updatedEmpleado = {
+				...selectedEmpleado,
+				usuario: {
+					usuarioId: selectedEmpleado.usuarioId,
+					legajo: legajo,
+					nombre: nombre,
+					apellido: apellido,
+				},
+			};
+
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(updatedEmpleado),
+				},
+			);
+
+			if (!response.ok) {
+				const errorData = await response.json();
+				console.error('Error status:', response.status);
+				console.error('Error data:', errorData);
+				throw new Error(`Error en la modificación: ${errorData.message}`);
 			}
-		  );
-	  
-		  if (!response.ok) {
-			const errorData = await response.json();
-			console.log('Error status:', response.status);
-			console.log('Error data:', errorData);
-			throw new Error('Error en la modificación');
-		  }
-	  
-		  // Actualiza el estado de los empleados
-		  setEmpleados(() => {
-			return empleados.map((emp) => {
-			  if (emp.id === selectedEmpleado.id) {
-				return updatedEmpleado;
-			  }
-			  return emp;
-			});
-		  });
-	  
-		  // Cerrar modales
-		  setShowEditModal(false);
-		  setShowSaveConfirmModal(false);
+
+			// Después de confirmar los cambios, realiza una nueva solicitud para obtener la lista actualizada de empleados
+			const updatedResponse = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado`,
+			);
+			const updatedData = await updatedResponse.json();
+
+			// Actualiza el estado de empleados con la nueva lista
+			setEmpleados(updatedData.empleados);
+
+			setShowEditModal(false);
+			setShowSaveConfirmModal(false);
 		} catch (error) {
-		  // Manejar error
-		  console.error('Error al actualizar empleado:', error.message);
+			console.error('Error al actualizar empleado:', error);
 		}
-	  };
+	};
 
 	return (
 		<div className='p-3'>
@@ -172,6 +164,7 @@ const VistaEmpleadosPage = () => {
 						<th>Acciones</th>
 					</tr>
 				</thead>
+
 				<tbody>
 					{Array.isArray(empleados) && empleados.length > 0 ? (
 						empleados.map((empleado) => (
@@ -192,12 +185,14 @@ const VistaEmpleadosPage = () => {
 										title='Consultar Empleado'>
 										<BsEye />
 									</Button>
+
 									<Button
 										variant='link'
 										onClick={() => handleModificar(empleado)}
 										title='Modificar Empleado'>
 										<BsPencil />
 									</Button>
+
 									<Button
 										variant='link'
 										onClick={() => handleEliminar(empleado.id)}
@@ -221,6 +216,7 @@ const VistaEmpleadosPage = () => {
 				<Modal.Header closeButton>
 					<Modal.Title>Detalles del Empleado</Modal.Title>
 				</Modal.Header>
+
 				<Modal.Body>
 					{selectedEmpleado && (
 						<>
@@ -259,6 +255,7 @@ const VistaEmpleadosPage = () => {
 						</>
 					)}
 				</Modal.Body>
+
 				<Modal.Footer>
 					<Button
 						variant='secondary'
@@ -274,6 +271,7 @@ const VistaEmpleadosPage = () => {
 				<Modal.Header closeButton>
 					<Modal.Title>Editar Empleado</Modal.Title>
 				</Modal.Header>
+
 				<Modal.Body>
 					{selectedEmpleado && (
 						<Form>
@@ -284,6 +282,7 @@ const VistaEmpleadosPage = () => {
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.legajo}
 								/>
 							</Form.Group>
+
 							<Form.Group controlId='formNombre'>
 								<Form.Label>Nombre</Form.Label>
 								<Form.Control
@@ -291,6 +290,7 @@ const VistaEmpleadosPage = () => {
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.nombre}
 								/>
 							</Form.Group>
+
 							<Form.Group controlId='formApellido'>
 								<Form.Label>Apellido</Form.Label>
 								<Form.Control
@@ -298,16 +298,17 @@ const VistaEmpleadosPage = () => {
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.apellido}
 								/>
 							</Form.Group>
-							{/* Agrega más campos de formulario según sea necesario */}
 						</Form>
 					)}
 				</Modal.Body>
+
 				<Modal.Footer>
 					<Button
 						variant='secondary'
 						onClick={() => setShowEditModal(false)}>
 						Cancelar
 					</Button>
+
 					<Button
 						variant='primary'
 						onClick={handleSave}>
@@ -322,15 +323,18 @@ const VistaEmpleadosPage = () => {
 				<Modal.Header closeButton>
 					<Modal.Title>Confirmar cambios</Modal.Title>
 				</Modal.Header>
+
 				<Modal.Body>
 					¿Estás seguro de que quieres guardar los cambios?
 				</Modal.Body>
+
 				<Modal.Footer>
 					<Button
 						variant='secondary'
 						onClick={() => setShowSaveConfirmModal(false)}>
 						Cancelar
 					</Button>
+
 					<Button
 						variant='primary'
 						onClick={handleConfirmSave}>
