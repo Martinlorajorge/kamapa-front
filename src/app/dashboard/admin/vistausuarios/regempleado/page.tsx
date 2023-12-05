@@ -149,7 +149,7 @@ const RegEmpleadoPage = () => {
 					},
 					usuario: {
 						legajo: '',
-						fecha_ingreso: '',
+						fecha_ingreso: new Date().toISOString().slice(0, 10),
 						fecha_egreso: null,
 						nombre: '',
 						apellido: '',
@@ -232,6 +232,20 @@ const RegEmpleadoPage = () => {
 	}, []);
 
 	console.log(formData.usuario.rolId);
+
+	useEffect(() => {
+		const intervalo = setInterval(() => {
+			setFormData((prevState) => ({
+				...prevState,
+				usuario: {
+					...prevState.usuario,
+					fecha_ingreso: new Date().toISOString().slice(0, 10),
+				},
+			}));
+		}, 1000);
+
+		return () => clearInterval(intervalo);
+	}, []);
 
 	return (
 		<Container className='p-3'>
@@ -448,7 +462,7 @@ const RegEmpleadoPage = () => {
 								<Form.Control
 									as='select'
 									name='usuario.rolId'
-									value={formData?.usuario.rolId||''}
+									value={formData?.usuario.rolId || ''}
 									onChange={handleChange}
 									required>
 									<option
