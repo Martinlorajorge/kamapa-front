@@ -79,7 +79,7 @@ const RegEmpleadoPage = () => {
 			create_for: `${session?.user?.user?.nombre}`,
 			update_for: '',
 			password: '',
-			rolId: `${session?.user?.rols?.id}`,
+			rolId: '',
 		},
 		domicilio: {
 			calle: '',
@@ -161,7 +161,7 @@ const RegEmpleadoPage = () => {
 						create_for: `${session?.user?.user?.nombre}`,
 						update_for: '',
 						password: '',
-						rolId: `${session?.user?.rols?.id}`,
+						rolId: '',
 					},
 					domicilio: {
 						calle: '',
@@ -231,7 +231,7 @@ const RegEmpleadoPage = () => {
 		fetchRoles();
 	}, []);
 
-	console.log(formData?.rols?.id);
+	console.log(formData.usuario.rolId);
 
 	return (
 		<Container className='p-3'>
@@ -448,7 +448,7 @@ const RegEmpleadoPage = () => {
 								<Form.Control
 									as='select'
 									name='usuario.rolId'
-									value={formData?.rols?.id || ''}
+									value={formData?.usuario.rolId||''}
 									onChange={handleChange}
 									required>
 									<option
