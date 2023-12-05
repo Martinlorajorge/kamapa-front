@@ -89,11 +89,15 @@ const VistaEmpleadosPage = () => {
 			).value;
 			// Agrega más campos según sea necesario
 
+
+			// console.log(selectedEmpleado)
 			// Crea el objeto empleado actualizado
+
+			
 			const updatedEmpleado = {
 				...selectedEmpleado,
-				UsuarioEmpleado: {
-					...selectedEmpleado.UsuarioEmpleado,
+				usuario: {
+					usuarioId : selectedEmpleado.id,
 					legajo: legajo,
 					nombre: nombre,
 					apellido: apellido,
@@ -108,13 +112,15 @@ const VistaEmpleadosPage = () => {
 				{
 					method: 'PUT',
 					headers: {
-						'Content-Type': 'application/json',
+						'Content-Type': 'application/json', // Asegúrate de que el servidor sepa que estás enviando JSON
 					},
 					body: JSON.stringify(updatedEmpleado),
 				},
-			);
-			console.log(selectedEmpleado);
-			console.log(response);
+			)
+			
+			// Actualiza el estado de los empleados
+			const data = await response.json();
+			console.log(data);
 
 			if (!response.ok) {
 				const errorData = await response.json();
@@ -123,8 +129,6 @@ const VistaEmpleadosPage = () => {
 				throw new Error('Error en la modificación');
 			}
 
-			// Actualiza el estado de los empleados
-			const data = await response.json();
 			setEmpleados((prevEmpleados) =>
 				prevEmpleados.map((empleado) =>
 					empleado.id === updatedEmpleado ? data : empleado,
