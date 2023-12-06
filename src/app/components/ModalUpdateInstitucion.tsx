@@ -8,11 +8,12 @@ interface ModalUpdateInstitucionProps {
     setShowEditModal: any;
     institucion: any;
     handleSave: any;
+    setInstitucion: any;
 }
 
-const ModalUpdateInstitucion: React.FC<ModalUpdateInstitucionProps> = ({id,showEditModal,setShowEditModal,institucion}) => {
+const ModalUpdateInstitucion: React.FC<ModalUpdateInstitucionProps> = ({id,showEditModal,setShowEditModal,institucion,setInstitucion}) => {
     
-    const handleFormSubmit =  async (event: React.FormEvent<HTMLFormElement | H>) => {
+    const handleFormSubmit =  async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const cue = document.getElementById('formCue').value;
@@ -40,19 +41,12 @@ const ModalUpdateInstitucion: React.FC<ModalUpdateInstitucionProps> = ({id,showE
         });
 
         const data = await response.json();
+        setInstitucion(data)
         
-        console.log(data);
+        if (response.ok) {
+            setShowEditModal(false);
+        }
 
-        // if (response.ok) {
-        //     setShowEditModal(false);
-        // }
-
-   
-
-        // if (isNotFoundError(data)) {
-        //     alert('No se pudo actualizar la institucion');
-        //     return;
-        // }
  
         // Aquí puedes hacer lo que necesites con los datos del formulario, como enviarlos a un servidor
     };

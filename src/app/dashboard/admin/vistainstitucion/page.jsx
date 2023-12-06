@@ -17,11 +17,10 @@ const VistaInstitucionPage = () => {
   const [type, setType] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [institucion]);
 
   useEffect(() => {
     if (confirmar) {
@@ -55,7 +54,6 @@ const VistaInstitucionPage = () => {
   };
 
   const handleConsultar = (id) => {
-    
     setShowModal(true);
     const instituto = instituciones.find(
       (institucion) => institucion.id === id
@@ -163,9 +161,15 @@ const VistaInstitucionPage = () => {
       <ModalViewInstitucion
         showModal={showModal}
         institucion={institucion}
-        setShowModal={setShowModal} 
+        setShowModal={setShowModal}
       />
-      <ModalUpdateInstitucion  showEditModal={showEditModal} setShowEditModal={setShowEditModal} institucion={institucion} id={institucion?.id} /> 
+      <ModalUpdateInstitucion
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+        institucion={institucion}
+        id={institucion?.id}
+        setInstitucion={setInstitucion}
+      />
       {type && (
         <Modal2
           type={type}
