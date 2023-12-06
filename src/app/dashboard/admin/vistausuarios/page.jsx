@@ -89,6 +89,7 @@ const VistaEmpleadosPage = () => {
 			const legajo = document.getElementById('formLegajo')?.value;
 			const nombre = document.getElementById('formNombre')?.value;
 			const apellido = document.getElementById('formApellido')?.value;
+			const dni = document.getElementById('formDNI')?.value;
 
 			const updatedEmpleado = {
 				...selectedEmpleado,
@@ -97,6 +98,7 @@ const VistaEmpleadosPage = () => {
 					legajo: legajo,
 					nombre: nombre,
 					apellido: apellido,
+					dni: dni,
 				},
 			};
 
@@ -331,6 +333,13 @@ const VistaEmpleadosPage = () => {
 								<Form.Control
 									type='text'
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.apellido}
+								/>
+							</Form.Group>
+							<Form.Group controlId='formDNI'>
+								<Form.Label>DNI</Form.Label>
+								<Form.Control
+									type='text'
+									defaultValue={selectedEmpleado?.UsuarioEmpleado?.dni}
 								/>
 							</Form.Group>
 						</Form>
