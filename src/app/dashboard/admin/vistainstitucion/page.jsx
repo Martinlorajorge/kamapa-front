@@ -5,15 +5,19 @@ import { BsEye, BsPencil, BsTrash } from "react-icons/bs";
 import Link from "next/link";
 import Modal2 from "../../../components/Modal";
 import { ModalType } from "../../../../utils/const";
+import ModalViewInstitucion from "../../../components/ModalViewInstitucion";
+import ModalUpdateInstitucion from "../../../components/ModalUpdateInstitucion";
 
 const VistaInstitucionPage = () => {
-  const [instituciones, setInstitucion] = useState([]);
+  const [instituciones, setInstituciones] = useState([]);
+  const [institucion, setInstitucion] = useState({});
   const [activo, setActivo] = useState(false);
   const [confirmar, setConfirmar] = useState(false);
   const [id, setId] = useState();
   const [type, setType] = useState("");
-
-  // console.log(institucion);
+  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  
 
   useEffect(() => {
     fetchData();
@@ -29,43 +33,49 @@ const VistaInstitucionPage = () => {
       );
       setConfirmar(false);
       setActivo(false);
-	  fetchData();
+      fetchData();
     }
   }, [confirmar]);
 
-
-
   const fetchData = async () => {
-	try {
-	  const response = await fetch(
-		`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/institucion`
-	  );
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/institucion`
+      );
 
-	  if (!response.ok) {
-		throw new Error(`Error ${response.status}: ${response.statusText}`);
-	  }
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
 
-	  const data = await response.json();
-	  setInstitucion(data);
-	} catch (error) {
-	  console.error("Error al obtener institucion:", error.message);
-	}
+      const data = await response.json();
+      setInstituciones(data);
+    } catch (error) {
+      console.error("Error al obtener institucion:", error.message);
+    }
   };
+
   const handleConsultar = (id) => {
-    // 	// Lógica para manejar la acción de consultar
-    console.log(`Consultar institucion con ID ${id}`);
+    
+    setShowModal(true);
+    const instituto = instituciones.find(
+      (institucion) => institucion.id === id
+    );
+    setInstitucion(instituto);
+    console.log(institucion);
   };
 
   const handleModificar = (id) => {
-    // 	// Lógica para manejar la acción de modificar
-    console.log(`Modificar institucion con ID ${id}`);
-    setActivo(true);
+    const instituto = instituciones.find(
+      (institucion) => institucion.id === id
+    );
+    setInstitucion(instituto);
+    setShowEditModal(true);
     setType(ModalType.Edit);
   };
 
   const handleEliminar = async (id) => {
     // Lógica para manejar la acción de eliminar
-	setId(id);
+    setId(id);
     setActivo(true);
     setType(ModalType.Delete);
   };
@@ -150,6 +160,12 @@ const VistaInstitucionPage = () => {
           )}
         </tbody>
       </Table>
+      <ModalViewInstitucion
+        showModal={showModal}
+        institucion={institucion}
+        setShowModal={setShowModal} 
+      />
+      <ModalUpdateInstitucion  showEditModal={showEditModal} setShowEditModal={setShowEditModal} institucion={institucion} id={institucion?.id} /> 
       {type && (
         <Modal2
           type={type}
@@ -163,4 +179,3 @@ const VistaInstitucionPage = () => {
 };
 
 export default VistaInstitucionPage;
-
