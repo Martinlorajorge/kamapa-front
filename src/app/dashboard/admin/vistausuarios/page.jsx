@@ -1,7 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button, Table, Modal, Form } from 'react-bootstrap';
+import { Button, Table, Modal, Form, Row, Col } from 'react-bootstrap';
 import { BsEye, BsPencil, BsTrash } from 'react-icons/bs';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const VistaEmpleadosPage = () => {
@@ -11,6 +12,12 @@ const VistaEmpleadosPage = () => {
 	const [showEditModal, setShowEditModal] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [showSaveConfirmModal, setShowSaveConfirmModal] = useState(false);
+
+	const { data: session, status } = useSession();
+
+	if (status === 'loading') {
+		return <Loading />;
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -129,28 +136,56 @@ const VistaEmpleadosPage = () => {
 
 	return (
 		<div className='p-3'>
-			<Link href='/dashboard/admin/vistausuarios/regempleado'>
-				<Button
-					variant='flat'
-					style={{
-						backgroundColor: 'purple',
-						color: 'white',
-						padding: '0.4rem 1rem',
-						fontSize: '1rem',
-						marginBottom: '1rem',
-						transition: 'all 0.3s ease',
-					}}
-					onMouseEnter={(e) => {
-						e.currentTarget.style.backgroundColor = 'white';
-						e.currentTarget.style.color = 'black';
-					}}
-					onMouseLeave={(e) => {
-						e.currentTarget.style.backgroundColor = 'purple';
-						e.currentTarget.style.color = 'white';
-					}}>
-					Registrar Empleado
-				</Button>
-			</Link>
+			<Row className='mb-3  justify-content-center'>
+				<Col>
+					<Link
+						href={`/dashboard/${session?.user?.rol?.name}/vistausuarios/regempleado`}>
+						<Button
+							variant='flat'
+							style={{
+								backgroundColor: 'purple',
+								color: 'white',
+								padding: '0.4rem 1rem',
+								fontSize: '1rem',
+								marginBottom: '1rem',
+								transition: 'all 0.3s ease',
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.backgroundColor = 'white';
+								e.currentTarget.style.color = 'black';
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.backgroundColor = 'purple';
+								e.currentTarget.style.color = 'white';
+							}}>
+							Registrar Empleado
+						</Button>
+					</Link>
+				</Col>
+				<Col>
+					{/* Botón para volver */}
+					<Link href={`/dashboard/${session?.user?.rol?.name}`}>
+						<Button
+							variant='secondary'
+							style={{
+								marginRight: '10px',
+								padding: '0.4rem 1rem',
+								fontSize: '1rem',
+								transition: 'all 0.3s ease',
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.backgroundColor = 'white';
+								e.currentTarget.style.color = 'black';
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.backgroundColor = 'grey';
+								e.currentTarget.style.color = 'white';
+							}}>
+							Volver
+						</Button>
+					</Link>
+				</Col>
+			</Row>
 
 			<Table
 				striped
