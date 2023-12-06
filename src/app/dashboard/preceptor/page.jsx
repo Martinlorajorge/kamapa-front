@@ -5,7 +5,7 @@ import { BsEye, BsPencil, BsTrash } from 'react-icons/bs';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
-const VistaEmpleadosPage = () => {
+const VistaAlumnosPage = () => {
 	const [empleados, setEmpleados] = useState([]);
 	const [selectedEmpleado, setSelectedEmpleado] = useState(null);
 	const [showModal, setShowModal] = useState(false);
@@ -14,6 +14,8 @@ const VistaEmpleadosPage = () => {
 	const [showSaveConfirmModal, setShowSaveConfirmModal] = useState(false);
 
 	const { data: session } = useSession();
+
+	
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -85,7 +87,7 @@ const VistaEmpleadosPage = () => {
 			const legajo = document.getElementById('formLegajo')?.value;
 			const nombre = document.getElementById('formNombre')?.value;
 			const apellido = document.getElementById('formApellido')?.value;
-			// const dni = document.getElementById('formDNI')?.value;
+			const dni = document.getElementById('formDNI')?.value;
 
 			const updatedEmpleado = {
 				...selectedEmpleado,
@@ -94,7 +96,7 @@ const VistaEmpleadosPage = () => {
 					legajo: legajo,
 					nombre: nombre,
 					apellido: apellido,
-					// dni: dni,
+					dni: dni,
 				},
 			};
 
@@ -137,7 +139,7 @@ const VistaEmpleadosPage = () => {
 			<Row className='mb-3  justify-content-center'>
 				<Col>
 					<Link
-						href={`/dashboard/${session?.user?.rol?.name}/vistausuarios/regempleado`}>
+						href={`/dashboard/${session?.user?.rol?.name}/regalumnos`}>
 						<Button
 							variant='flat'
 							style={{
@@ -331,13 +333,13 @@ const VistaEmpleadosPage = () => {
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.apellido}
 								/>
 							</Form.Group>
-							{/* <Form.Group controlId='formDNI'>
+							<Form.Group controlId='formDNI'>
 								<Form.Label>DNI</Form.Label>
 								<Form.Control
 									type='text'
 									defaultValue={selectedEmpleado?.UsuarioEmpleado?.dni}
 								/>
-							</Form.Group> */}
+							</Form.Group>
 						</Form>
 					)}
 				</Modal.Body>
@@ -412,4 +414,4 @@ const VistaEmpleadosPage = () => {
 	);
 };
 
-export default VistaEmpleadosPage;
+export default VistaAlumnosPage;
