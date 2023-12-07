@@ -13,8 +13,7 @@ interface Provincia {
 
 // Define la interfaz para el formulario
 interface FormData {
-	empleado: {
-		matricula: string;
+	alumno: {
 		isActive: null;
 	};
 	usuario: {
@@ -31,7 +30,6 @@ interface FormData {
 		create_for: string;
 		update_for: string;
 		password: string;
-		rolId: string;
 	};
 	domicilio: {
 		calle: string;
@@ -46,7 +44,7 @@ interface FormData {
 	};
 }
 
-const RegEmpleadoPage = () => {
+const RegAlumnoPage = () => {
 	// Usa el hook useSession de next-auth/react para obtener la sesión actual
 	const { data: session } = useSession();
 
@@ -61,8 +59,7 @@ const RegEmpleadoPage = () => {
 
 	// Estado para almacenar los datos del formulario
 	const [formData, setFormData] = useState<FormData>({
-		empleado: {
-			matricula: '',
+		alumno: {
 			isActive: null,
 		},
 		usuario: {
@@ -79,7 +76,6 @@ const RegEmpleadoPage = () => {
 			create_for: `${session?.user?.user?.nombre}`,
 			update_for: '',
 			password: '',
-			rolId: '',
 		},
 		domicilio: {
 			calle: '',
@@ -129,7 +125,7 @@ const RegEmpleadoPage = () => {
 		e.preventDefault();
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alumno`,
 				{
 					method: 'POST',
 					headers: {
@@ -143,8 +139,7 @@ const RegEmpleadoPage = () => {
 				setShowModal(true);
 				// Limpiar los campos después de un registro exitoso
 				setFormData({
-					empleado: {
-						matricula: '',
+					alumno: {
 						isActive: null,
 					},
 					usuario: {
@@ -161,7 +156,6 @@ const RegEmpleadoPage = () => {
 						create_for: `${session?.user?.user?.nombre}`,
 						update_for: '',
 						password: '',
-						rolId: '',
 					},
 					domicilio: {
 						calle: '',
@@ -211,27 +205,7 @@ const RegEmpleadoPage = () => {
 		fetchProvincias();
 	}, []);
 
-	useEffect(() => {
-		const fetchRoles = async () => {
-			try {
-				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rols`,
-				);
-				if (response.ok) {
-					const data = await response.json();
-					setRoles(data);
-				} else {
-					console.error('Error al cargar los roles:', response.statusText);
-				}
-			} catch (error) {
-				console.error('Error al cargar los roles:', error);
-			}
-		};
 
-		fetchRoles();
-	}, []);
-
-	console.log(formData.usuario.rolId);
 
 	useEffect(() => {
 		const intervalo = setInterval(() => {
@@ -269,17 +243,17 @@ const RegEmpleadoPage = () => {
 							/>
 						</Form.Group>
 					</Col>
-					<Col>
+					{/* <Col>
 						<Form.Group controlId='matricula'>
 							<Form.Label>matricula</Form.Label>
 							<Form.Control
 								type='text'
-								name='empleado.matricula'
-								value={formData.empleado.matricula}
+								name='alumno.matricula'
+								value={formData.alumno.matricula}
 								onChange={handleChange}
 							/>
 						</Form.Group>
-					</Col>
+					</Col> */}
 				</Row>
 				<Row className='mb-3'>
 					<Col>
@@ -461,7 +435,7 @@ const RegEmpleadoPage = () => {
 								/>
 							</Form.Group>
 						</Col>
-						<Col>
+						{/* <Col>
 							<Form.Group controlId='rolId'>
 								<Form.Label>Rol *</Form.Label>
 								<Form.Control
@@ -473,7 +447,7 @@ const RegEmpleadoPage = () => {
 									<option
 										disabled
 										value=''>
-										Selecciona un Rol para el empleado
+										Selecciona un Rol para el alumno
 									</option>
 									{roles.map((rol) => (
 										<option
@@ -484,7 +458,7 @@ const RegEmpleadoPage = () => {
 									))}
 								</Form.Control>
 							</Form.Group>
-						</Col>
+						</Col> */}
 					</Row>
 				</Row>
 
@@ -509,7 +483,7 @@ const RegEmpleadoPage = () => {
 								e.currentTarget.style.backgroundColor = 'purple';
 								e.currentTarget.style.color = 'white';
 							}}>
-							Registrar Empleado
+							Registrar Alumno
 						</Button>
 					</Col>
 					<Col>
@@ -561,4 +535,4 @@ const RegEmpleadoPage = () => {
 	);
 };
 
-export default RegEmpleadoPage;
+export default RegAlumnoPage;

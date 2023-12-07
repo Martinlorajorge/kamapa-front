@@ -6,8 +6,8 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const VistaAlumnosPage = () => {
-	const [empleados, setEmpleados] = useState([]);
-	const [selectedEmpleado, setSelectedEmpleado] = useState(null);
+	const [alumnos, setAlumnos] = useState([]);
+	const [selectedAlumno, setSelectedAlumno] = useState(null);
 	const [showModal, setShowModal] = useState(false);
 	const [showEditModal, setShowEditModal] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -21,7 +21,7 @@ const VistaAlumnosPage = () => {
 		const fetchData = async () => {
 			try {
 				const response = await fetch(
-					`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado`,
+					`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alumno`,
 				);
 
 				if (!response.ok) {
@@ -29,35 +29,35 @@ const VistaAlumnosPage = () => {
 				}
 
 				const data = await response.json();
-				setEmpleados(data.empleados);
+				setAlumnos(data.alumnos);
 				console.log(data);
 			} catch (error) {
-				console.error('Error al obtener empleados:', error.message);
+				console.error('Error al obtener alumnos:', error.message);
 			}
 		};
 
 		fetchData();
 	}, []);
 
-	const handleConsultar = (empleado) => {
-		setSelectedEmpleado(empleado);
+	const handleConsultar = (alumno) => {
+		setSelectedAlumno(alumno);
 		setShowModal(true);
 	};
 
-	const handleEliminar = (empleado) => {
-		setSelectedEmpleado(empleado);
+	const handleEliminar = (alumno) => {
+		setSelectedAlumno(alumno);
 		setShowConfirmModal(true);
 	};
 
 	const handleConfirmDelete = async () => {
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado}`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alumno/fisico/${selectedAlumno}`,
 				{
 					method: 'DELETE',
 				},
 			);
-			console.log(selectedEmpleado);
+			console.log(selectedAlumno);
 
 			if (!response.ok) {
 				const errorData = await response.json();
@@ -66,15 +66,15 @@ const VistaAlumnosPage = () => {
 				throw new Error('Error en la eliminación');
 			}
 
-			setEmpleados(empleados.filter((emp) => emp.id !== selectedEmpleado));
+			setAlumnos(alumnos.filter((emp) => emp.id !== selectedAlumno));
 			setShowConfirmModal(false);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	const handleModificar = (empleado) => {
-		setSelectedEmpleado(empleado);
+	const handleModificar = (alumno) => {
+		setSelectedAlumno(alumno);
 		setShowEditModal(true);
 	};
 
@@ -89,10 +89,10 @@ const VistaAlumnosPage = () => {
 			const apellido = document.getElementById('formApellido')?.value;
 			const dni = document.getElementById('formDNI')?.value;
 
-			const updatedEmpleado = {
-				...selectedEmpleado,
+			const updatedAlumno = {
+				...selectedAlumno,
 				usuario: {
-					usuarioId: selectedEmpleado.usuarioId,
+					usuarioId: selectedAlumno.usuarioId,
 					legajo: legajo,
 					nombre: nombre,
 					apellido: apellido,
@@ -101,13 +101,13 @@ const VistaAlumnosPage = () => {
 			};
 
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado/${selectedEmpleado.id}`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alumno/${selectedAlumno.id}`,
 				{
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(updatedEmpleado),
+					body: JSON.stringify(updatedAlumno),
 				},
 			);
 
@@ -118,19 +118,19 @@ const VistaAlumnosPage = () => {
 				throw new Error(`Error en la modificación: ${errorData.message}`);
 			}
 
-			// Después de confirmar los cambios, realiza una nueva solicitud para obtener la lista actualizada de empleados
+			// Después de confirmar los cambios, realiza una nueva solicitud para obtener la lista actualizada de alumnos
 			const updatedResponse = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/empleado`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/alumno`,
 			);
 			const updatedData = await updatedResponse.json();
 
-			// Actualiza el estado de empleados con la nueva lista
-			setEmpleados(updatedData.empleados);
+			// Actualiza el estado de alumnos con la nueva lista
+			setAlumnos(updatedData.alumnos);
 
 			setShowEditModal(false);
 			setShowSaveConfirmModal(false);
 		} catch (error) {
-			console.error('Error al actualizar empleado:', error);
+			console.error('Error al actualizar alumno:', error);
 		}
 	};
 
@@ -158,7 +158,7 @@ const VistaAlumnosPage = () => {
 								e.currentTarget.style.backgroundColor = 'purple';
 								e.currentTarget.style.color = 'white';
 							}}>
-							Registrar Empleado
+							Registrar Alumno
 						</Button>
 					</Link>
 				</Col>
@@ -201,37 +201,37 @@ const VistaAlumnosPage = () => {
 				</thead>
 
 				<tbody>
-					{Array.isArray(empleados) && empleados.length > 0 ? (
-						empleados.map((empleado) => (
-							<tr key={empleado.id}>
-								<td>{empleado?.UsuarioEmpleado?.legajo}</td>
+					{Array.isArray(alumnos) && alumnos.length > 0 ? (
+						alumnos.map((alumno) => (
+							<tr key={alumno.id}>
+								<td>{alumno?.UsuarioAlumno?.legajo}</td>
 								<td>
-									{empleado.UsuarioEmpleado &&
-										`${empleado?.UsuarioEmpleado?.nombre}, ${empleado?.UsuarioEmpleado?.apellido}`}
+									{alumno.UsuarioAlumno &&
+										`${alumno?.UsuarioAlumno?.nombre}, ${alumno?.UsuarioAlumno?.apellido}`}
 								</td>
 								<td>
-									{empleado.UsuarioEmpleado &&
-										empleado?.UsuarioEmpleado?.telefono}
+									{alumno.UsuarioAlumno &&
+										alumno?.UsuarioAlumno?.telefono}
 								</td>
 								<td>
 									<Button
 										variant='link'
-										onClick={() => handleConsultar(empleado)}
-										title='Consultar Empleado'>
+										onClick={() => handleConsultar(alumno)}
+										title='Consultar Alumno'>
 										<BsEye />
 									</Button>
 
 									<Button
 										variant='link'
-										onClick={() => handleModificar(empleado)}
-										title='Modificar Empleado'>
+										onClick={() => handleModificar(alumno)}
+										title='Modificar Alumno'>
 										<BsPencil />
 									</Button>
 
 									<Button
 										variant='link'
-										onClick={() => handleEliminar(empleado.id)}
-										title='Eliminar Empleado'>
+										onClick={() => handleEliminar(alumno.id)}
+										title='Eliminar Alumno'>
 										<BsTrash />
 									</Button>
 								</td>
@@ -239,7 +239,7 @@ const VistaAlumnosPage = () => {
 						))
 					) : (
 						<tr>
-							<td colSpan='4'>No hay empleados disponibles</td>
+							<td colSpan='4'>No hay alumnos disponibles</td>
 						</tr>
 					)}
 				</tbody>
@@ -249,41 +249,41 @@ const VistaAlumnosPage = () => {
 				show={showModal}
 				onHide={() => setShowModal(false)}>
 				<Modal.Header closeButton>
-					<Modal.Title>Detalles del Empleado</Modal.Title>
+					<Modal.Title>Detalles del Alumno</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
-					{selectedEmpleado && (
+					{selectedAlumno && (
 						<>
-							<p>Legajo: {selectedEmpleado?.UsuarioEmpleado?.legajo}</p>
+							<p>Legajo: {selectedAlumno?.UsuarioAlumno?.legajo}</p>
 							<p>
 								Fecha de ingreso:{' '}
 								{new Date(
-									selectedEmpleado?.UsuarioEmpleado?.fecha_ingreso,
+									selectedAlumno?.UsuarioAlumno?.fecha_ingreso,
 								).toLocaleDateString()}
 							</p>
 							<p>
 								Fecha de egreso:{' '}
-								{selectedEmpleado?.UsuarioEmpleado?.fecha_egreso
+								{selectedAlumno?.UsuarioAlumno?.fecha_egreso
 									? new Date(
-											selectedEmpleado?.UsuarioEmpleado?.fecha_egreso,
+											selectedAlumno?.UsuarioAlumno?.fecha_egreso,
 									  ).toLocaleDateString()
 									: 'N/A'}
 							</p>
-							<p>Nombre: {selectedEmpleado?.UsuarioEmpleado?.nombre}</p>
-							<p>Apellido: {selectedEmpleado?.UsuarioEmpleado?.apellido}</p>
-							<p>DNI: {selectedEmpleado?.UsuarioEmpleado?.dni}</p>
-							<p>CUIL: {selectedEmpleado?.UsuarioEmpleado?.cuil}</p>
+							<p>Nombre: {selectedAlumno?.UsuarioAlumno?.nombre}</p>
+							<p>Apellido: {selectedAlumno?.UsuarioAlumno?.apellido}</p>
+							<p>DNI: {selectedAlumno?.UsuarioAlumno?.dni}</p>
+							<p>CUIL: {selectedAlumno?.UsuarioAlumno?.cuil}</p>
 							<p>
 								Fecha de nacimiento:{' '}
 								{new Date(
-									selectedEmpleado?.UsuarioEmpleado?.fechaNacimiento,
+									selectedAlumno?.UsuarioAlumno?.fechaNacimiento,
 								).toLocaleDateString()}
 							</p>
-							<p>Teléfono: {selectedEmpleado?.UsuarioEmpleado?.telefono}</p>
+							<p>Teléfono: {selectedAlumno?.UsuarioAlumno?.telefono}</p>
 							<p>
 								Estado:{' '}
-								{selectedEmpleado?.UsuarioEmpleado?.is_active
+								{selectedAlumno?.UsuarioAlumno?.is_active
 									? 'Activo'
 									: 'Inactivo'}
 							</p>
@@ -304,17 +304,17 @@ const VistaAlumnosPage = () => {
 				show={showEditModal}
 				onHide={() => setShowEditModal(false)}>
 				<Modal.Header closeButton>
-					<Modal.Title>Editar Empleado</Modal.Title>
+					<Modal.Title>Editar Alumno</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
-					{selectedEmpleado && (
+					{selectedAlumno && (
 						<Form>
 							<Form.Group controlId='formLegajo'>
 								<Form.Label>Legajo</Form.Label>
 								<Form.Control
 									type='text'
-									defaultValue={selectedEmpleado?.UsuarioEmpleado?.legajo}
+									defaultValue={selectedAlumno?.UsuarioAlumno?.legajo}
 								/>
 							</Form.Group>
 
@@ -322,7 +322,7 @@ const VistaAlumnosPage = () => {
 								<Form.Label>Nombre</Form.Label>
 								<Form.Control
 									type='text'
-									defaultValue={selectedEmpleado?.UsuarioEmpleado?.nombre}
+									defaultValue={selectedAlumno?.UsuarioAlumno?.nombre}
 								/>
 							</Form.Group>
 
@@ -330,14 +330,14 @@ const VistaAlumnosPage = () => {
 								<Form.Label>Apellido</Form.Label>
 								<Form.Control
 									type='text'
-									defaultValue={selectedEmpleado?.UsuarioEmpleado?.apellido}
+									defaultValue={selectedAlumno?.UsuarioAlumno?.apellido}
 								/>
 							</Form.Group>
 							<Form.Group controlId='formDNI'>
 								<Form.Label>DNI</Form.Label>
 								<Form.Control
 									type='text'
-									defaultValue={selectedEmpleado?.UsuarioEmpleado?.dni}
+									defaultValue={selectedAlumno?.UsuarioAlumno?.dni}
 								/>
 							</Form.Group>
 						</Form>
@@ -393,7 +393,7 @@ const VistaAlumnosPage = () => {
 				</Modal.Header>
 
 				<Modal.Body>
-					¿Estás seguro de que quieres eliminar a este empleado?
+					¿Estás seguro de que quieres eliminar a este alumno?
 				</Modal.Body>
 
 				<Modal.Footer>
