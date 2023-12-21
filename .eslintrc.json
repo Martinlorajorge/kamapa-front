@@ -11,7 +11,7 @@
 	"rules": {}, // .eslintrc.js
 	"module.exports": {
 		// ... otras configuraciones ...
-		"extends": ["plugin:react/recommended"],
+		"extends": ["next", "next/core-web-vitals"],
 		"rules": {
 			// ... otras reglas ...
 			"react/prop-types": "off" // Desactiva la regla react/prop-types

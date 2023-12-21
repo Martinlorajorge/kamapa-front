@@ -1,8 +1,63 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+interface User {
+	id: number;
+	legajo: string;
+	fecha_ingreso: string;
+	fecha_egreso: string | null;
+	nombre: string;
+	apellido: string;
+	dni: string;
+	cuil: string;
+	fechaNacimiento: string;
+	telefono: string;
+	is_active: boolean;
+	create_for: string;
+	update_for: string;
+	password: string;
+	createdAt: string;
+	updatedAt: string;
+	domicilioId: number;
+	contactoId: number;
+	rolId: number;
+	rol: {
+		id: number;
+		name: string;
+		createdAt: string;
+		updatedAt: string;
+	};
+}
+
+interface SessionUser {
+	id: number;
+	legajo: string;
+	fecha_ingreso: string;
+	fecha_egreso: string | null;
+	nombre: string;
+	apellido: string;
+	dni: string;
+	cuil: string;
+	fechaNacimiento: string;
+	telefono: string;
+	is_active: boolean;
+	create_for: string;
+	update_for: string;
+	password: string;
+	createdAt: string;
+	updatedAt: string;
+	domicilioId: number;
+	contactoId: number;
+	rolId: number;
+	rol: {
+		id: number;
+		name: string;
+		createdAt: string;
+		updatedAt: string;
+	};
+}
+
 const handler = NextAuth({
-	// Proveedor del servicio
 	providers: [
 		CredentialsProvider({
 			name: 'Credentials',
@@ -15,7 +70,6 @@ const handler = NextAuth({
 				},
 			},
 			async authorize(credentials) {
-				// Aquí viene el usuario del servidor
 				const res = await fetch(
 					`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
 					{
@@ -30,7 +84,7 @@ const handler = NextAuth({
 				const user = await res.json();
 
 				if (user.error) {
-					throw new Error(user.error); // Mostrar este error en la página de inicio de sesión
+					throw new Error(user.error);
 				}
 
 				console.log(user);
@@ -38,17 +92,15 @@ const handler = NextAuth({
 			},
 		}),
 	],
-	// Nutre de información el usuario y le pasa el token
 	callbacks: {
 		async jwt({ token, user }) {
 			return { ...token, ...user };
 		},
-		// y aki le da esos datos a la session
 		async session({ session, token, user }) {
-			session.user = {
-				...token,
-				...user,
-			};
+			session.token = token;
+			session.user = token.user;
+			session.rol = token.rol;
+
 			console.log('session', session);
 			return session;
 		},
