@@ -97,22 +97,9 @@ const handler = NextAuth({
 			return { ...token, ...user };
 		},
 		async session({ session, token, user }) {
-			const userData: User = (user as any)?.user || {};
-			const rolData = (user as any)?.rol || {};
-			const rolName: string = rolData?.name || '';
-
-			const sessionUser: SessionUser = {
-				...token,
-				...userData,
-				rol: {
-					id: rolData?.id || 0,
-					name: rolName,
-					createdAt: rolData?.createdAt || '',
-					updatedAt: rolData?.updatedAt || '',
-				},
-			};
-
-			session.user = sessionUser;
+			session.token = token;
+			session.user = token.user;
+			session.rol = token.rol;
 
 			console.log('session', session);
 			return session;

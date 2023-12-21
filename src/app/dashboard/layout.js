@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
 				// Agrega todos los roles y sus rutas permitidas
 			};
 
-			const userRole = session.user?.rol?.name;
+			const userRole = session.rol?.name;
 			const currentPath = router.pathname;
 
 			// Comprobaciones de existencia antes de acceder a las propiedades
