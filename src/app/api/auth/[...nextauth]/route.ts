@@ -57,6 +57,11 @@ interface SessionUser {
 	};
 }
 
+interface Session {
+	user: SessionUser;
+	token: string; // Agrega la propiedad token al tipo Session
+}
+
 const handler = NextAuth({
 	providers: [
 		CredentialsProvider({
@@ -96,12 +101,11 @@ const handler = NextAuth({
 		async jwt({ token, user }) {
 			return { ...token, ...user };
 		},
-		async session({ session, token, user }) {
-			session.token = token;
+		async session({ session, token }) {
+			// Nota: token ya se pasa como argumento
 			session.user = token.user;
 			session.rol = token.rol;
-
-			console.log('session', session);
+			session.token = token; // Asigna el token al objeto de sesión
 			return session;
 		},
 	},
