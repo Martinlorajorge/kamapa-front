@@ -1,7 +1,5 @@
 'use client';
 import React from 'react';
-import { useSession } from 'next-auth/react';
-import { Loading } from '../../components/Loading';
 
 import {
 	Container,
@@ -16,11 +14,6 @@ import {
 import Link from 'next/link';
 
 export default function AdminPage() {
-	const { data: status } = useSession();
-
-	if (status === 'loading') {
-		return <Loading />;
-	}
 	return (
 		<Container>
 			<Row className='mb-3  justify-content-center'>
