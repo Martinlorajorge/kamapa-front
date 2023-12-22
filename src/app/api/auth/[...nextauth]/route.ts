@@ -21,45 +21,18 @@ interface User {
 	domicilioId: number;
 	contactoId: number;
 	rolId: number;
-	rol: {
-		id: number;
-		name: string;
-		createdAt: string;
-		updatedAt: string;
-	};
+}
+
+interface Rol {
+	id: number;
+	name: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 interface SessionUser {
-	id: number;
-	legajo: string;
-	fecha_ingreso: string;
-	fecha_egreso: string | null;
-	nombre: string;
-	apellido: string;
-	dni: string;
-	cuil: string;
-	fechaNacimiento: string;
-	telefono: string;
-	is_active: boolean;
-	create_for: string;
-	update_for: string;
-	password: string;
-	createdAt: string;
-	updatedAt: string;
-	domicilioId: number;
-	contactoId: number;
-	rolId: number;
-	rol: {
-		id: number;
-		name: string;
-		createdAt: string;
-		updatedAt: string;
-	};
-}
-
-interface Session {
-	user: SessionUser;
-	token: string; // Agrega la propiedad token al tipo Session
+	token: string;
+	rol: Rol;
 }
 
 const handler = NextAuth({
@@ -103,8 +76,8 @@ const handler = NextAuth({
 		},
 		async session({ session, token }) {
 			// Nota: token ya se pasa como argumento
-			session.user = token.user;
-			session.rol = token.rol;
+			session.user = token.user as SessionUser;
+			session.rol = token.rol as Rol;
 			session.token = token; // Asigna el token al objeto de sesión
 			return session;
 		},

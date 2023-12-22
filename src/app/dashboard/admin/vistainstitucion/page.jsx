@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Image } from 'react-bootstrap';
 import { BsEye, BsPencil, BsTrash } from 'react-icons/bs';
 import Link from 'next/link';
 import Modal2 from '../../../components/Modal';
@@ -120,10 +120,13 @@ const VistaInstitucionPage = () => {
 							<tr key={institucion.id}>
 								{/* Accede a las propiedades del objeto institucion de acuerdo a la estructura */}
 								<td>
-									<img
+									<Image
 										src={institucion.logo}
 										alt=''
-										style={{ width: '50px' }}
+										width={50}
+										height={50}
+										quality={100}
+										priority={true}
 									/>
 								</td>
 								<td>{institucion && `${institucion.cue}`}</td>

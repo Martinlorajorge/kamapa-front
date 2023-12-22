@@ -5,6 +5,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
 import Image from 'next/image';
 import Link from 'next/link';
+import Bienvenida2 from '../../public/bienvenida2.png';
 function DarkVariantExample() {
 	return (
 		<ThemeProvider>
@@ -44,23 +45,23 @@ function DarkVariantExample() {
 						zIndex: -1, // Ajusta la propiedad zIndex
 					}}>
 					<Carousel.Item>
-						<img
+						<Image
+							src={Bienvenida2}
 							className='d-block w-100'
-							src='/bienvenida2.png'
-							alt='First slide'
+							alt='Third slide'
 						/>
 					</Carousel.Item>
 					<Carousel.Item>
-						<img
+						<Image
+							src={Bienvenida2}
 							className='d-block w-100'
-							src='/bienvenida2.png'
-							alt='Second slide'
+							alt='Third slide'
 						/>
 					</Carousel.Item>
 					<Carousel.Item>
-						<img
+						<Image
+							src={Bienvenida2}
 							className='d-block w-100'
-							src='/bienvenida2.png'
 							alt='Third slide'
 						/>
 					</Carousel.Item>
