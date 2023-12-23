@@ -509,7 +509,7 @@ const RegEmpleadoPage = () => {
 					</Col>
 					<Col>
 						{/* Botón para volver */}
-						<Link href={`/dashboard/${session?.rol?.name}/vistausuarios`}>
+						<Link href={`/dashboard/${session?.user?.rol?.name}/vistausuarios`}>
 							<Button
 								variant='secondary'
 								style={{

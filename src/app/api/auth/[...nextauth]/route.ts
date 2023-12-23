@@ -30,7 +30,7 @@ interface Rol {
 	updatedAt: string;
 }
 
-interface SessionUser {
+interface SessionUser extends User {
 	token: string;
 	rol: Rol;
 }
@@ -72,14 +72,21 @@ const handler = NextAuth({
 	],
 	callbacks: {
 		async jwt({ token, user }) {
-			return { ...token, ...user };
+			if (user) {
+				token.user = {
+					...user.user,
+					rol: user.rol,
+				};
+			}
+
+			return token;
 		},
+
 		async session({ session, token }) {
-			// Nota: token ya se pasa como argumento
-			session.user = token.user as SessionUser;
-			session.rol = token.rol as Rol;
-			session.token = token; // Asigna el token al objeto de sesión
+			session.user = token.user || {};
+
 			return session;
+			console.log(session);
 		},
 	},
 	pages: {
