@@ -83,10 +83,13 @@ const handler = NextAuth({
 		},
 
 		async session({ session, token }) {
-			session.user = token.user || {};
+			session.user = token.user;
+			session.id = token.user.id;
+			session.password = token.user.password;
+			session.rol = token.user.rol.name;
 
-			return session;
 			console.log(session);
+			return session;
 		},
 	},
 	pages: {
