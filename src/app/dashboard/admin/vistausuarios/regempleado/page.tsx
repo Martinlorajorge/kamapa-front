@@ -158,7 +158,7 @@ const RegEmpleadoPage = () => {
 						fechaNacimiento: '',
 						telefono: '',
 						is_active: true,
-						create_for: `${session?.user?.nombre}`,
+						create_for: `${session.nombre}`,
 						update_for: '',
 						password: '',
 						rolId: '',
@@ -509,7 +509,7 @@ const RegEmpleadoPage = () => {
 					</Col>
 					<Col>
 						{/* Botón para volver */}
-						<Link href={`/dashboard/${session?.user?.rol?.name}/vistausuarios`}>
+						<Link href={`/dashboard/${session.rol}/vistausuarios`}>
 							<Button
 								variant='secondary'
 								style={{

@@ -136,8 +136,7 @@ const VistaEmpleadosPage = () => {
 		<div className='p-3'>
 			<Row className='mb-3  justify-content-center'>
 				<Col>
-					<Link
-						href={`/dashboard/${session?.user?.rol?.name}/vistausuarios/regempleado`}>
+					<Link href={`/dashboard/${session.rol}/vistausuarios/regempleado`}>
 						<Button
 							variant='flat'
 							style={{
@@ -162,7 +161,7 @@ const VistaEmpleadosPage = () => {
 				</Col>
 				<Col>
 					{/* Botón para volver */}
-					<Link href={`/dashboard/${session?.user.rol?.name}`}>
+					<Link href={`/dashboard/${session.rol}`}>
 						<Button
 							variant='secondary'
 							style={{
