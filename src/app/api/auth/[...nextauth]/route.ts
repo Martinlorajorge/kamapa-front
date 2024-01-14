@@ -1,5 +1,9 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+
+import { getSession } from 'next-auth/react';
+import { JWT } from 'next-auth/jwt';
+
 interface Rol {
 	id: number;
 	name: string;
@@ -35,7 +39,7 @@ interface Session {
 	expires: string;
 	id: number;
 	password: string;
-	rol: string;
+	rol: Rol;
 	nombre: string;
 	apellido: string;
 	dni: string;
@@ -78,30 +82,29 @@ const handler = NextAuth({
 		}),
 	],
 	callbacks: {
-		async jwt({ token, user }) {
+		async session(
+			params: {
+				session: Session;
+				token: JWT;
+				user: any;
+			} & ReturnType<typeof getSession>,
+		) {
+			const { session, token } = params;
+			// Accede anidando a las propiedades de user
+			if (token.user) {
+				session.rol = token.user.rol;
+			}
+			session.user = (token.user as any)?.user;
+			console.log(session);
+			return Promise.resolve(session);
+		},
+		async jwt(params: { token: JWT; user: User | any } & JWT['jwt']) {
+			const { token, user } = params;
 			if (user) {
-				token.user = {
-					...user, // Acceder a las propiedades directamente
-					rol: user.rol,
-				};
+				token.user = user;
 			}
 
 			return token;
-		},
-
-		async session({ session, token }) {
-			session.user = token.user.user;
-			session.id = token.user.id;
-			session.password = token.user.password;
-			session.rol = token.user.rol.name;
-			session.nombre = token.user.nombre;
-			session.apellido = token.user.apellido;
-			session.dni = token.user.dni;
-			session.telefono = token.user.telefono;
-			session.legajo = token.user.legajo;
-
-			console.log(session);
-			return session; // La sesión ya está estructurada correctamente
 		},
 	},
 	pages: {

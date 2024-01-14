@@ -17,6 +17,7 @@ const Dashboard = () => {
 		window.location.replace('/login');
 		return null;
 	}
+	console.log(session);
 
 	// // Función para cerrar sesión
 	// const handleLogout = async () => {
@@ -27,7 +28,7 @@ const Dashboard = () => {
 	return (
 		<div className='d-flex justify-content-center align-items-center mt-5'>
 			<Card className='text-center'>
-				<Card.Header>Panel {session.rol}</Card.Header>
+				<Card.Header>Panel {session.rol.name}</Card.Header>
 				<Card.Body>
 					<Card.Title>
 						Bienvenido, {session.user.nombre} {session.user.apellido}
@@ -38,7 +39,7 @@ const Dashboard = () => {
 					</Card.Text>
 
 					{/* Enlace a la ruta específica según el rol */}
-					<Link href={`/dashboard/${session.rol}`}>
+					<Link href={`/dashboard/${session.rol.name}`}>
 						<Button
 							variant='flat'
 							type='submit'
