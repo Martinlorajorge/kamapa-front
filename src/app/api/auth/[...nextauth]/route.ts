@@ -82,20 +82,12 @@ const handler = NextAuth({
 		}),
 	],
 	callbacks: {
-		async session(
-			params: {
-				session: Session;
-				token: JWT;
-				user: any;
-			} & ReturnType<typeof getSession>,
-		) {
-			const { session, token } = params;
+		async session({ session, token }) {
 			// Accede anidando a las propiedades de user
-			if (token.user) {
-				session.rol = token.user.rol;
-			}
 			session.user = (token.user as any)?.user;
+			session.user.rol = (token.user as any)?.user.rol;
 			console.log(session);
+			console.log(session.user);
 			return Promise.resolve(session);
 		},
 		async jwt(params: { token: JWT; user: User | any } & JWT['jwt']) {
