@@ -85,7 +85,7 @@ const handler = NextAuth({
 		async session({ session, token }) {
 			// Accede anidando a las propiedades de user
 			session.user = (token.user as any)?.user;
-			session.user.rol = (token.user as any)?.user.rol;
+			session.user.rol = (token.rol as any)?.user.rol;
 			console.log(session);
 			console.log(session.user);
 			return Promise.resolve(session);
