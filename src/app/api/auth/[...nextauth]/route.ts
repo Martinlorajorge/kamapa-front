@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import { getSession } from 'next-auth/react';
-import { JWT } from 'next-auth/jwt';
+import JWT from 'next-auth/jwt';
 
 interface Rol {
 	id: number;
@@ -34,12 +33,15 @@ interface User {
 	rol: Rol;
 }
 
-interface AdapterUser extends User {}
+interface AuthUser {
+	user: User;
+}
 
-interface Session {
+interface Session extends User {
 	// Interfaz Session declarada una sola vez
-	user: AdapterUser;
-	expires: string;
+	nombre: string;
+	rol: Rol;
+	password: string;
 }
 
 const handler = NextAuth({
@@ -78,26 +80,35 @@ const handler = NextAuth({
 		}),
 	],
 	callbacks: {
-		async session({ session, token }: { session: Session; token: JWT }) {
-			// Actualizamos el tipo de session.user a AdapterUser
-			session.user = token.user as AdapterUser;
-			console.log(session);
-			console.log(session.user);
-			return Promise.resolve(session);
-		},
-		async jwt({
-			token,
-			user,
-		}: {
-			token: JWT;
-			user: User | AdapterUser | null;
-		}) {
-			if (user) {
-				// Verificamos que user sea de tipo AdapterUser antes de asignarlo
-				const adapterUser = user as AdapterUser;
-				token.user = adapterUser;
+		async session({ session, token }) {
+			if (token) {
+				const { id, nombre, apellido, rol } = token;
+
+				session.user = {
+					id,
+					nombre,
+					apellido,
+					rol,
+				};
 			}
-			return token;
+
+			return session;
+		},
+		async JWT({ token, user }: { token: JWT; user: AuthUser }): Promise<any> {
+			const userData = user.user;
+
+			const { nombre, apellido, rol } = userData;
+
+			const { password } = userData;
+
+			const payload = {
+				nombre,
+				apellido,
+				rol: rol.name,
+				password,
+			};
+
+			return JWT.sign(payload);
 		},
 	},
 	pages: {
