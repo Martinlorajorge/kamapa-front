@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import JWT from 'next-auth/jwt';
+import jwt from 'next-auth/jwt';
 
 interface Rol {
 	id: number;
@@ -94,7 +94,7 @@ const handler = NextAuth({
 
 			return session;
 		},
-		async JWT({ token, user }: { token: JWT; user: AuthUser }): Promise<any> {
+		async jwt({ token, user }: { token: jwt; user: AuthUser }): Promise<any> {
 			const userData = user.user;
 
 			const { nombre, apellido, rol } = userData;
@@ -108,7 +108,7 @@ const handler = NextAuth({
 				password,
 			};
 
-			return JWT.sign(payload);
+			return jwt.sign(payload);
 		},
 	},
 	pages: {
