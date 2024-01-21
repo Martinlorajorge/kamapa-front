@@ -37,15 +37,9 @@ interface User {
 interface Session {
 	user: User;
 	expires: string;
-	id: number;
-	password: string;
-	rol: Rol;
-	nombre: string;
-	apellido: string;
-	dni: string;
-	telefono: string;
-	legajo: string;
 }
+
+interface AdapterUser extends User {}
 
 const handler = NextAuth({
 	providers: [
@@ -71,31 +65,35 @@ const handler = NextAuth({
 						headers: { 'Content-Type': 'application/json' },
 					},
 				);
-				const session = await res.json();
+				const user = await res.json();
 
-				if (session.error) {
-					throw new Error(session.error);
+				if (user.error) {
+					throw new Error(user.error);
 				}
+				console.log(user);
 
-				return session;
+				return user;
 			},
 		}),
 	],
 	callbacks: {
-		async session({ session, token }) {
+		async session({ session, token }: { session: Session; token: JWT }) {
 			// Accede anidando a las propiedades de user
-			session.user = (token.user as any)?.user;
-			session.user.rol = (token.rol as any)?.user.rol;
+			session.user = token.user as User;
 			console.log(session);
 			console.log(session.user);
 			return Promise.resolve(session);
 		},
-		async jwt(params: { token: JWT; user: User | any } & JWT['jwt']) {
-			const { token, user } = params;
+		async jwt({
+			token,
+			user,
+		}: {
+			token: JWT;
+			user: User | AdapterUser | null;
+		}) {
 			if (user) {
 				token.user = user;
 			}
-
 			return token;
 		},
 	},
