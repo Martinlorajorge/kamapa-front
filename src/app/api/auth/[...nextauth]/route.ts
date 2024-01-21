@@ -34,12 +34,13 @@ interface User {
 	rol: Rol;
 }
 
+interface AdapterUser extends User {}
+
 interface Session {
-	user: User;
+	// Interfaz Session declarada una sola vez
+	user: AdapterUser;
 	expires: string;
 }
-
-interface AdapterUser extends User {}
 
 const handler = NextAuth({
 	providers: [
@@ -78,8 +79,8 @@ const handler = NextAuth({
 	],
 	callbacks: {
 		async session({ session, token }: { session: Session; token: JWT }) {
-			// Accede anidando a las propiedades de user
-			session.user = token.user as User;
+			// Actualizamos el tipo de session.user a AdapterUser
+			session.user = token.user as AdapterUser;
 			console.log(session);
 			console.log(session.user);
 			return Promise.resolve(session);
@@ -92,7 +93,9 @@ const handler = NextAuth({
 			user: User | AdapterUser | null;
 		}) {
 			if (user) {
-				token.user = user;
+				// Verificamos que user sea de tipo AdapterUser antes de asignarlo
+				const adapterUser = user as AdapterUser;
+				token.user = adapterUser;
 			}
 			return token;
 		},
