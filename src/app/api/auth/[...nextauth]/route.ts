@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
-import { getSession } from 'next-auth/react';
-import { JWT } from 'next-auth/jwt';
+import jwt from 'jsonwebtoken';
 
 interface Rol {
 	id: number;
@@ -34,17 +32,10 @@ interface User {
 	rol: Rol;
 }
 
-interface Session {
+interface AuthResponse {
 	user: User;
-	expires: string;
-	id: number;
-	password: string;
 	rol: Rol;
-	nombre: string;
-	apellido: string;
-	dni: string;
-	telefono: string;
-	legajo: string;
+	error?: string; // Asegúrate de ajustar esto según la estructura real de tu respuesta
 }
 
 const handler = NextAuth({
@@ -60,44 +51,66 @@ const handler = NextAuth({
 				},
 			},
 			async authorize(credentials) {
-				const res = await fetch(
-					`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
-					{
-						method: 'POST',
-						body: JSON.stringify({
-							dni: credentials?.dni,
-							password: credentials?.password,
-						}),
-						headers: { 'Content-Type': 'application/json' },
-					},
-				);
-				const session = await res.json();
+				try {
+					const res = await fetch(
+						`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
+						{
+							method: 'POST',
+							body: JSON.stringify({
+								dni: credentials?.dni,
+								password: credentials?.password,
+							}),
+							headers: { 'Content-Type': 'application/json' },
+						},
+					);
 
-				if (session.error) {
-					throw new Error(session.error);
+					if (!res.ok) {
+						throw new Error(
+							`Error en la solicitud: ${res.status} ${res.statusText}`,
+						);
+					}
+
+					const data: AuthResponse = await res.json();
+
+					if (data.error) {
+						throw new Error(data.error);
+					}
+
+					const { user, rol } = data;
+
+					// Modifica el proceso de firma del token según tus necesidades
+					const signedToken = customSignToken(
+						user,
+						rol,
+						process.env.NEXTAUTH_SECRET,
+					);
+					console.log('Signed Token:', signedToken);
+					console.log(data);
+					return data;
+				} catch (error) {
+					console.error('Error en la función authorize:', error);
+					throw error;
 				}
-
-				return session;
 			},
 		}),
 	],
 	callbacks: {
 		async session({ session, token }) {
-			// Accede anidando a las propiedades de user
-			session.user = (token.user as any)?.user;
-			session.user.rol = (token.user as any)?.user.rol;
-			console.log(session);
-			console.log(session.user);
-			return Promise.resolve(session);
-		},
-		async jwt(params: { token: JWT; user: User | any } & JWT['jwt']) {
-			const { token, user } = params;
-			if (user) {
-				token.user = user;
+			if (token.user && token.rol) {
+				session.user = {
+					...token.data.user,
+					rol: token.data.rol.name,
+				};
 			}
-
-			return token;
+			console.log(session);
+			return session;
 		},
+	},
+	async jwt(token, user) {
+		if (user) {
+			token.user = user;
+		}
+		return token;
 	},
 	pages: {
 		signIn: '/login',
@@ -105,3 +118,26 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
+
+// Función personalizada para firmar el token
+function customSignToken(
+	user: User,
+	rol: Rol,
+	secret: string | undefined,
+): string {
+	if (!secret) {
+		throw new Error('NEXTAUTH_SECRET not defined in environment variables.');
+	}
+
+	const payload = {
+		nombre: user.nombre,
+		apellido: user.apellido,
+		rol: rol.name,
+		password: user.password,
+	};
+
+	// Realiza aquí cualquier modificación o personalización necesaria en la firma del token
+	const signedToken = jwt.sign(payload, secret);
+
+	return signedToken;
+}
